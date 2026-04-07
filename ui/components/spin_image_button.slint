@@ -1,0 +1,36 @@
+import { Theme } from "../theme.slint";
+
+export component SpinImageButton inherits Rectangle {
+    background: #00000000;
+
+    img := Image {
+        width: parent.width;
+        height: parent.height;
+        source: @image-url("../assets/spin-button.svg");
+        rotation-angle: touch.has-hover ? 360deg : 0deg;
+        rotation-origin-x: self.width / 2;
+        rotation-origin-y: self.height / 2;
+        animate rotation-angle { duration: 640ms; easing: linear; }
+    }
+
+    Rectangle {
+        x: -8px * Theme.ui-scale;
+        y: -8px * Theme.ui-scale;
+        width: parent.width + 16px * Theme.ui-scale;
+        height: parent.height + 16px * Theme.ui-scale;
+        border-radius: 18px * Theme.ui-scale;
+        background: #485be0ff;
+        opacity: touch.has-hover ? 0.28 : 0.0;
+        animate opacity { duration: 180ms; }
+    }
+
+    touch := TouchArea {
+        scroll-event(event) => {
+            if (event.modifiers.control && event.delta_y != 0px) {
+                Theme.user-zoom = max(0.7, min(2.2, Theme.user-zoom + (event.delta_y > 0px ? 0.08 : -0.08)));
+                return accept;
+            }
+            reject
+        }
+    }
+}

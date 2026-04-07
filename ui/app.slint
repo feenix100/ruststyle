@@ -1,0 +1,311 @@
+import { Theme } from "theme.slint";
+
+import { ButtonDemo } from "demos/button_demo.slint";
+import { PanelDemo } from "demos/panel_demo.slint";
+import { TextDemo } from "demos/text_demo.slint";
+import { HoverDemo } from "demos/hover_demo.slint";
+import { ThemeDemo } from "demos/theme_demo.slint";
+
+// Root app window for Rust UI Style Playground.
+// Pass 2 keeps the architecture but increases polish, separation, and presentation quality.
+export component AppWindow inherits Window {
+    title: "Rust Styles";
+    in-out property <float> animation-phase: 0;
+    in-out property <float> window-scale <=> Theme.window-scale;
+    in-out property <float> user-zoom <=> Theme.user-zoom;
+    default-font-family: "Segoe UI Variable Text";
+    default-font-size: 18px * Theme.ui-scale;
+    preferred-width: 1220px;
+    preferred-height: 940px;
+    background: Theme.app-bg;
+
+    private property <length> hero-height: 238px * Theme.ui-scale;
+    private property <bool> hero-side-expanded: root.width > 980px * Theme.ui-scale;
+    private property <length> hero-side-width: hero-side-expanded ? 300px * Theme.ui-scale : 0px;
+    private property <length> hero-copy-width: max(240px * Theme.ui-scale, root.width - Theme.space-xl * 2 - hero-side-width - (hero-side-expanded ? 40px * Theme.ui-scale : 0px));
+    private property <length> button-section-y: 0px;
+    private property <length> button-section-h: 770px * Theme.ui-scale;
+    private property <length> panel-section-y: button-section-y + button-section-h + Theme.space-md;
+    private property <length> panel-section-h: 770px * Theme.ui-scale;
+    private property <length> text-section-y: panel-section-y + panel-section-h + Theme.space-md;
+    private property <length> text-section-h: 770px * Theme.ui-scale;
+    private property <length> hover-section-y: text-section-y + text-section-h + Theme.space-md;
+    private property <length> hover-section-h: 620px * Theme.ui-scale;
+    private property <length> theme-section-y: hover-section-y + hover-section-h + Theme.space-md;
+    private property <length> theme-section-h: 920px * Theme.ui-scale;
+    private property <length> content-height: theme-section-y + theme-section-h + Theme.space-lg;
+
+    Rectangle {
+        width: parent.width;
+        height: parent.height;
+        background: Theme.app-bg;
+
+        TouchArea {
+            width: parent.width;
+            height: parent.height;
+            scroll-event(event) => {
+                if (event.modifiers.control && event.delta_y != 0px) {
+                    Theme.user-zoom = max(0.7, min(2.2, Theme.user-zoom + (event.delta_y > 0px ? 0.08 : -0.08)));
+                    return accept;
+                }
+                reject
+            }
+        }
+
+        Rectangle {
+            x: 0px;
+            y: 0px;
+            width: parent.width;
+            height: hero-height;
+            background: #152132;
+        }
+
+        Rectangle {
+            x: 0px;
+            y: 0px;
+            width: parent.width;
+            height: 70px * Theme.ui-scale;
+            background: Theme.app-bg-deep;
+        }
+
+        Rectangle {
+            x: parent.width - 340px * Theme.ui-scale;
+            y: 18px * Theme.ui-scale;
+            width: 280px * Theme.ui-scale;
+            height: 160px * Theme.ui-scale;
+            border-radius: 34px * Theme.ui-scale;
+            background: #234865;
+            opacity: hero-side-expanded ? 0.28 : 0.0;
+            visible: hero-side-expanded;
+        }
+
+        Rectangle {
+            x: parent.width - 256px * Theme.ui-scale;
+            y: 52px * Theme.ui-scale;
+            width: 180px * Theme.ui-scale;
+            height: 120px * Theme.ui-scale;
+            border-radius: 28px * Theme.ui-scale;
+            background: Theme.accent;
+            opacity: hero-side-expanded ? 0.08 : 0.0;
+            visible: hero-side-expanded;
+        }
+
+        Rectangle {
+            x: Theme.space-xl;
+            y: 22px * Theme.ui-scale;
+            width: 126px * Theme.ui-scale;
+            height: 28px * Theme.ui-scale;
+            border-radius: 14px * Theme.ui-scale;
+            background: #1d3145;
+            border-width: 1px * Theme.ui-scale;
+            border-color: Theme.border-strong;
+
+            Text {
+                text: "Interactive Slint Lab";
+                color: Theme.text-main;
+                font-size: 11px * Theme.ui-scale;
+                font-weight: 760;
+                horizontal-alignment: center;
+                vertical-alignment: center;
+            }
+        }
+
+        Text {
+            x: Theme.space-xl;
+            y: 64px * Theme.ui-scale;
+            width: hero-copy-width;
+            text: "Design bold UI states, then zoom the whole scene while you inspect them.";
+            color: Theme.text-strong;
+            font-size: 38px * Theme.ui-scale;
+            font-weight: 760;
+            horizontal-alignment: left;
+            vertical-alignment: center;
+            wrap: word-wrap;
+        }
+
+        header-subtitle := Text {
+            x: Theme.space-xl;
+            y: 128px * Theme.ui-scale;
+            width: hero-copy-width;
+            text: "Updated hero framing, richer hover highlights, and Ctrl + scroll zoom that scales typography, spacing, and demo panels together.";
+            color: Theme.text-muted;
+            font-size: 15px * Theme.ui-scale;
+            wrap: word-wrap;
+            horizontal-alignment: left;
+            vertical-alignment: top;
+        }
+
+        Rectangle {
+            x: Theme.space-xl;
+            y: header-subtitle.y + header-subtitle.height + 12px * Theme.ui-scale;
+            width: 156px * Theme.ui-scale;
+            height: 30px * Theme.ui-scale;
+            border-radius: 15px * Theme.ui-scale;
+            background: #1a2b3d;
+            border-width: 1px * Theme.ui-scale;
+            border-color: #32506f;
+
+            Text {
+                text: "Hero states: 5 demos";
+                color: Theme.text-main;
+                font-size: 11px * Theme.ui-scale;
+                font-weight: 680;
+                horizontal-alignment: center;
+                vertical-alignment: center;
+            }
+        }
+
+        Rectangle {
+            x: Theme.space-xl + 168px * Theme.ui-scale;
+            y: header-subtitle.y + header-subtitle.height + 12px * Theme.ui-scale;
+            width: 166px * Theme.ui-scale;
+            height: 30px * Theme.ui-scale;
+            border-radius: 15px * Theme.ui-scale;
+            background: #1a342f;
+            border-width: 1px * Theme.ui-scale;
+            border-color: #2f6b5d;
+
+            Text {
+                text: "Zoom: Ctrl + wheel";
+                color: Theme.text-main;
+                font-size: 11px * Theme.ui-scale;
+                font-weight: 680;
+                horizontal-alignment: center;
+                vertical-alignment: center;
+            }
+        }
+
+        Rectangle {
+            x: parent.width - Theme.space-xl - 300px * Theme.ui-scale;
+            y: 78px * Theme.ui-scale;
+            width: 300px * Theme.ui-scale;
+            height: 122px * Theme.ui-scale;
+            border-radius: Theme.radius-lg;
+            background: Theme.panel-bg;
+            border-width: 1px * Theme.ui-scale;
+            border-color: #355779;
+            visible: hero-side-expanded;
+
+            Rectangle {
+                x: 0px;
+                y: 0px;
+                width: parent.width;
+                height: 3px * Theme.ui-scale;
+                background: Theme.accent;
+            }
+
+            VerticalLayout {
+                padding: 18px * Theme.ui-scale;
+                spacing: 8px * Theme.ui-scale;
+
+                Text {
+                    text: "Viewport Controls";
+                    color: Theme.text-strong;
+                    font-size: 18px * Theme.ui-scale;
+                    font-weight: 720;
+                }
+
+                Text {
+                    text: "Hold Ctrl while scrolling to resize the interface without breaking the demo rhythm.";
+                    color: Theme.text-muted;
+                    font-size: 13px * Theme.ui-scale;
+                    wrap: word-wrap;
+                }
+
+                Text {
+                    text: "Scale " + Theme.zoom-percent + "%";
+                    color: Theme.accent;
+                    font-size: 12px * Theme.ui-scale;
+                    font-weight: 760;
+                }
+            }
+        }
+
+        body-clip := Rectangle {
+            x: Theme.space-xl;
+            y: hero-height + Theme.space-sm;
+            width: parent.width - Theme.space-xl * 2;
+            height: parent.height - self.y - Theme.space-xl;
+            background: #00000000;
+            clip: true;
+
+            body-scroll := Flickable {
+                width: parent.width - 14px * Theme.ui-scale;
+                height: parent.height;
+                viewport-width: self.width;
+                viewport-height: content-height;
+
+                Rectangle {
+                    width: body-scroll.viewport-width;
+                    height: body-scroll.viewport-height;
+                    background: #00000000;
+
+                    ButtonDemo {
+                        x: 0px;
+                        y: button-section-y;
+                        width: parent.width - Theme.space-sm;
+                        height: button-section-h;
+                        animation-phase: root.animation-phase;
+                    }
+                    PanelDemo {
+                        x: 0px;
+                        y: panel-section-y;
+                        width: parent.width - Theme.space-sm;
+                        height: panel-section-h;
+                        animation-phase: root.animation-phase;
+                    }
+                    TextDemo {
+                        x: 0px;
+                        y: text-section-y;
+                        width: parent.width - Theme.space-sm;
+                        height: text-section-h;
+                        animation-phase: root.animation-phase;
+                    }
+                    HoverDemo {
+                        x: 0px;
+                        y: hover-section-y;
+                        width: parent.width - Theme.space-sm;
+                        height: hover-section-h;
+                    }
+                    ThemeDemo {
+                        x: 0px;
+                        y: theme-section-y;
+                        width: parent.width - Theme.space-sm;
+                        height: theme-section-h;
+                    }
+                }
+            }
+
+            Rectangle {
+                x: parent.width - 8px;
+                y: 0px;
+                width: 6px * Theme.ui-scale;
+                height: parent.height;
+                border-radius: 3px * Theme.ui-scale;
+                background: #142232;
+
+                thumb := Rectangle {
+                    private property <length> track-height: parent.height;
+                    private property <length> thumb-height:
+                        body-scroll.viewport-height <= body-scroll.height
+                        ? track-height
+                        : (body-scroll.height * body-scroll.height / body-scroll.viewport-height < 48px * Theme.ui-scale
+                            ? 48px * Theme.ui-scale
+                            : body-scroll.height * body-scroll.height / body-scroll.viewport-height);
+                    private property <length> max-scroll:
+                        body-scroll.viewport-height > body-scroll.height ? body-scroll.viewport-height - body-scroll.height : 0px;
+                    private property <length> travel:
+                        track-height > thumb-height ? track-height - thumb-height : 0px;
+
+                    x: 0px;
+                    y: max-scroll > 0px ? (-body-scroll.viewport-y / max-scroll) * travel : 0px;
+                    width: parent.width;
+                    height: thumb-height;
+                    border-radius: 3px * Theme.ui-scale;
+                    background: #5fc0ff;
+                    opacity: max-scroll > 0px ? 0.75 : 0;
+                }
+            }
+        }
+    }
+}

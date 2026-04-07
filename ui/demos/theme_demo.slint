@@ -1,0 +1,373 @@
+import { Theme } from "../theme.slint";
+import { DemoSection } from "../components/demo_section.slint";
+import { StylePreviewRow } from "../components/style_preview_row.slint";
+import { StyledButton } from "../components/styled_button.slint";
+import { GlowPanel } from "../components/glow_panel.slint";
+
+export component ThemeDemo inherits DemoSection {
+    title: "5. Theme / Style System";
+    subtitle: "The theme section now behaves like a visual style board, showing how palette, semantics, spacing, and hero emphasis combine into one system.";
+
+    in-out property <bool> boosted: false;
+
+    StylePreviewRow {
+        title: "Palette Runway";
+        caption: "Primary, soft, and deep accent tokens are staged as a miniature visual runway so the palette feels intentional instead of abstract.";
+        VerticalLayout {
+            spacing: Theme.space-sm;
+
+            Rectangle {
+                width: 408px * Theme.ui-scale;
+                height: 108px * Theme.ui-scale;
+                border-radius: Theme.radius-md;
+                border-width: 1px * Theme.ui-scale;
+                border-color: Theme.border;
+                background: #1f2b3d;
+
+                Rectangle {
+                    x: 0px;
+                    y: 0px;
+                    width: parent.width;
+                    height: 3px * Theme.ui-scale;
+                    background: Theme.accent;
+                }
+
+                Rectangle {
+                    x: 16px * Theme.ui-scale;
+                    y: 18px * Theme.ui-scale;
+                    width: 168px * Theme.ui-scale;
+                    height: 72px * Theme.ui-scale;
+                    border-radius: 36px * Theme.ui-scale;
+                    background: Theme.accent;
+                    opacity: 0.16;
+                }
+
+                Rectangle {
+                    x: 126px * Theme.ui-scale;
+                    y: 10px * Theme.ui-scale;
+                    width: 142px * Theme.ui-scale;
+                    height: 82px * Theme.ui-scale;
+                    border-radius: 41px * Theme.ui-scale;
+                    background: Theme.accent-soft;
+                    opacity: 0.22;
+                }
+
+                Rectangle {
+                    x: 246px * Theme.ui-scale;
+                    y: 22px * Theme.ui-scale;
+                    width: 136px * Theme.ui-scale;
+                    height: 62px * Theme.ui-scale;
+                    border-radius: 31px * Theme.ui-scale;
+                    background: Theme.accent-deep;
+                    opacity: 0.38;
+                }
+
+                VerticalLayout {
+                    padding: 16px * Theme.ui-scale;
+                    spacing: 10px * Theme.ui-scale;
+
+                    Text {
+                        text: "Accent Gradient Family";
+                        color: Theme.text-strong;
+                        font-size: 16px * Theme.ui-scale;
+                        font-weight: 730;
+                    }
+
+                    HorizontalLayout {
+                        spacing: 8px * Theme.ui-scale;
+
+                        Rectangle { width: 96px * Theme.ui-scale; height: 14px * Theme.ui-scale; border-radius: 7px * Theme.ui-scale; background: Theme.accent; }
+                        Rectangle { width: 68px * Theme.ui-scale; height: 14px * Theme.ui-scale; border-radius: 7px * Theme.ui-scale; background: Theme.accent-soft; }
+                        Rectangle { width: 56px * Theme.ui-scale; height: 14px * Theme.ui-scale; border-radius: 7px * Theme.ui-scale; background: Theme.accent-deep; }
+                    }
+
+                    Text {
+                        text: "One family drives trims, glows, and depth cues.";
+                        color: Theme.text-muted;
+                        font-size: 11px * Theme.ui-scale;
+                    }
+                }
+            }
+
+            HorizontalLayout {
+                spacing: Theme.space-sm;
+
+                StyledButton {
+                    text: "Accent Button";
+                    base-color: #23344a;
+                    hover-color: #2f4f72;
+                    pressed-color: #1d2e42;
+                    outline-color: Theme.accent;
+                    width: 142px * Theme.ui-scale;
+                    height: 40px * Theme.ui-scale;
+                }
+
+                GlowPanel {
+                    width: 250px * Theme.ui-scale;
+                    height: 82px * Theme.ui-scale;
+                    title: "Accent Panel";
+                    subtitle: "The same accent tone anchors glow, trim, and text hierarchy.";
+                    accent-color: Theme.accent;
+                    panel-color: #223145;
+                }
+            }
+        }
+    }
+
+    StylePreviewRow {
+        title: "Semantic Control Deck";
+        caption: "States are presented as compact system cards so color meaning reads instantly before the labels are parsed.";
+        HorizontalLayout {
+            spacing: Theme.space-sm;
+
+            Rectangle {
+                width: 128px * Theme.ui-scale;
+                height: 118px * Theme.ui-scale;
+                border-radius: Theme.radius-sm;
+                border-width: 1px * Theme.ui-scale;
+                border-color: #7d5f2a;
+                background: #352918;
+
+                Rectangle { x: 0px; y: 0px; width: parent.width; height: 4px * Theme.ui-scale; background: Theme.warning; }
+                Rectangle { x: 14px * Theme.ui-scale; y: 26px * Theme.ui-scale; width: 16px * Theme.ui-scale; height: 16px * Theme.ui-scale; border-radius: 8px * Theme.ui-scale; background: Theme.warning; }
+                Rectangle { x: 40px * Theme.ui-scale; y: 30px * Theme.ui-scale; width: 56px * Theme.ui-scale; height: 8px * Theme.ui-scale; border-radius: 4px * Theme.ui-scale; background: Theme.text-main; opacity: 0.45; }
+                Rectangle { x: 14px * Theme.ui-scale; y: 60px * Theme.ui-scale; width: 72px * Theme.ui-scale; height: 12px * Theme.ui-scale; border-radius: 6px * Theme.ui-scale; background: Theme.warning; }
+                Rectangle { x: 14px * Theme.ui-scale; y: 82px * Theme.ui-scale; width: 92px * Theme.ui-scale; height: 8px * Theme.ui-scale; border-radius: 4px * Theme.ui-scale; background: #6f5531; }
+
+                Text { x: 14px * Theme.ui-scale; y: 96px * Theme.ui-scale; text: "Warning"; color: Theme.text-muted; font-size: 11px * Theme.ui-scale; }
+            }
+
+            Rectangle {
+                width: 128px * Theme.ui-scale;
+                height: 118px * Theme.ui-scale;
+                border-radius: Theme.radius-sm;
+                border-width: 1px * Theme.ui-scale;
+                border-color: #873f4c;
+                background: #351d22;
+
+                Rectangle { x: 0px; y: 0px; width: parent.width; height: 4px * Theme.ui-scale; background: Theme.danger; }
+                Rectangle { x: 14px * Theme.ui-scale; y: 26px * Theme.ui-scale; width: 16px * Theme.ui-scale; height: 16px * Theme.ui-scale; border-radius: 8px * Theme.ui-scale; background: Theme.danger; }
+                Rectangle { x: 40px * Theme.ui-scale; y: 30px * Theme.ui-scale; width: 56px * Theme.ui-scale; height: 8px * Theme.ui-scale; border-radius: 4px * Theme.ui-scale; background: Theme.text-main; opacity: 0.45; }
+                Rectangle { x: 14px * Theme.ui-scale; y: 60px * Theme.ui-scale; width: 78px * Theme.ui-scale; height: 12px * Theme.ui-scale; border-radius: 6px * Theme.ui-scale; background: Theme.danger; }
+                Rectangle { x: 14px * Theme.ui-scale; y: 82px * Theme.ui-scale; width: 96px * Theme.ui-scale; height: 8px * Theme.ui-scale; border-radius: 4px * Theme.ui-scale; background: #7b3945; }
+
+                Text { x: 14px * Theme.ui-scale; y: 96px * Theme.ui-scale; text: "Risk"; color: Theme.text-muted; font-size: 11px * Theme.ui-scale; }
+            }
+
+            Rectangle {
+                width: 128px * Theme.ui-scale;
+                height: 118px * Theme.ui-scale;
+                border-radius: Theme.radius-sm;
+                border-width: 1px * Theme.ui-scale;
+                border-color: #338268;
+                background: #1c342e;
+
+                Rectangle { x: 0px; y: 0px; width: parent.width; height: 4px * Theme.ui-scale; background: Theme.success; }
+                Rectangle { x: 14px * Theme.ui-scale; y: 26px * Theme.ui-scale; width: 16px * Theme.ui-scale; height: 16px * Theme.ui-scale; border-radius: 8px * Theme.ui-scale; background: Theme.success; }
+                Rectangle { x: 40px * Theme.ui-scale; y: 30px * Theme.ui-scale; width: 56px * Theme.ui-scale; height: 8px * Theme.ui-scale; border-radius: 4px * Theme.ui-scale; background: Theme.text-main; opacity: 0.45; }
+                Rectangle { x: 14px * Theme.ui-scale; y: 60px * Theme.ui-scale; width: 70px * Theme.ui-scale; height: 12px * Theme.ui-scale; border-radius: 6px * Theme.ui-scale; background: Theme.success; }
+                Rectangle { x: 14px * Theme.ui-scale; y: 82px * Theme.ui-scale; width: 90px * Theme.ui-scale; height: 8px * Theme.ui-scale; border-radius: 4px * Theme.ui-scale; background: #2d5f4f; }
+
+                Text { x: 14px * Theme.ui-scale; y: 96px * Theme.ui-scale; text: "Ready"; color: Theme.text-muted; font-size: 11px * Theme.ui-scale; }
+            }
+        }
+    }
+
+    StylePreviewRow {
+        title: "Rhythm Strip";
+        caption: "Radii and spacing are shown as a layout strip, so users can read the cadence of the system instead of only seeing labels.";
+        VerticalLayout {
+            spacing: Theme.space-sm;
+
+            HorizontalLayout {
+                spacing: Theme.space-sm;
+
+                Rectangle {
+                    width: 104px * Theme.ui-scale;
+                    height: 42px * Theme.ui-scale;
+                    border-radius: Theme.radius-sm;
+                    border-width: 1px * Theme.ui-scale;
+                    border-color: Theme.border;
+                    background: #253145;
+                    Text { text: "radius-sm"; color: Theme.text-main; horizontal-alignment: center; vertical-alignment: center; }
+                }
+
+                Rectangle {
+                    width: 104px * Theme.ui-scale;
+                    height: 42px * Theme.ui-scale;
+                    border-radius: Theme.radius-lg;
+                    border-width: 1px * Theme.ui-scale;
+                    border-color: Theme.border;
+                    background: #253145;
+                    Text { text: "radius-lg"; color: Theme.text-main; horizontal-alignment: center; vertical-alignment: center; }
+                }
+
+                Rectangle {
+                    width: 180px * Theme.ui-scale;
+                    height: 42px * Theme.ui-scale;
+                    border-radius: 21px * Theme.ui-scale;
+                    border-width: 1px * Theme.ui-scale;
+                    border-color: Theme.border-strong;
+                    background: #213248;
+
+                    HorizontalLayout {
+                        padding: 10px * Theme.ui-scale;
+                        spacing: 8px * Theme.ui-scale;
+                        Rectangle { width: 12px * Theme.ui-scale; height: 12px * Theme.ui-scale; border-radius: 6px * Theme.ui-scale; background: Theme.accent; }
+                        Rectangle { width: 28px * Theme.ui-scale; height: 8px * Theme.ui-scale; border-radius: 4px * Theme.ui-scale; background: Theme.text-main; opacity: 0.55; }
+                        Rectangle { width: 48px * Theme.ui-scale; height: 8px * Theme.ui-scale; border-radius: 4px * Theme.ui-scale; background: Theme.text-main; opacity: 0.28; }
+                    }
+                }
+            }
+
+            Rectangle {
+                width: 408px * Theme.ui-scale;
+                height: 64px * Theme.ui-scale;
+                border-radius: Theme.radius-md;
+                border-width: 1px * Theme.ui-scale;
+                border-color: Theme.border;
+                background: #202d3e;
+
+                VerticalLayout {
+                    padding: 10px * Theme.ui-scale;
+                    spacing: 8px * Theme.ui-scale;
+
+                    Text {
+                        text: "Spacing Progression";
+                        color: Theme.text-muted;
+                        font-size: 11px * Theme.ui-scale;
+                    }
+
+                    HorizontalLayout {
+                        spacing: Theme.space-xs;
+                        Rectangle { width: Theme.space-xs * 2; height: 12px * Theme.ui-scale; border-radius: 6px * Theme.ui-scale; background: #47617d; }
+                        Rectangle { width: Theme.space-sm * 4; height: 12px * Theme.ui-scale; border-radius: 6px * Theme.ui-scale; background: #5b7ca1; }
+                        Rectangle { width: Theme.space-md * 5; height: 12px * Theme.ui-scale; border-radius: 6px * Theme.ui-scale; background: #6f97c5; }
+                        Rectangle { width: Theme.space-lg * 6; height: 12px * Theme.ui-scale; border-radius: 6px * Theme.ui-scale; background: Theme.accent; }
+                    }
+                }
+            }
+        }
+    }
+
+    StylePreviewRow {
+        hero: true;
+        title: "Hero Theme Stage";
+        caption: "The hero preview now reads like a miniature dashboard wall, so one toggle visibly retunes surface, palette, and signal intensity together.";
+        VerticalLayout {
+            spacing: Theme.space-sm;
+
+            HorizontalLayout {
+                spacing: Theme.space-sm;
+
+                StyledButton {
+                    text: root.boosted ? "Boost ON" : "Boost OFF";
+                    checkable: true;
+                    checked: root.boosted;
+                    hero: true;
+                    width: 124px * Theme.ui-scale;
+                    height: 40px * Theme.ui-scale;
+                    base-color: root.boosted ? #2c5f88 : #26384d;
+                    hover-color: root.boosted ? #3877ab : #314c6c;
+                    selected-color: #2f86bb;
+                    outline-color: root.boosted ? Theme.accent : Theme.border-strong;
+                    clicked => { root.boosted = !root.boosted; }
+                }
+
+                GlowPanel {
+                    hero: true;
+                    width: 270px * Theme.ui-scale;
+                    height: 96px * Theme.ui-scale;
+                    title: root.boosted ? "Boosted Theme" : "Base Theme";
+                    subtitle: root.boosted ? "Higher contrast, brighter signal edges, stronger palette separation." : "Balanced contrast with quieter glow and softer accents.";
+                    accent-color: root.boosted ? Theme.accent : #5f7b9d;
+                    panel-color: root.boosted ? #26405a : #25354b;
+                    hover-emphasis: true;
+                }
+            }
+
+            Rectangle {
+                width: 408px * Theme.ui-scale;
+                height: 142px * Theme.ui-scale;
+                border-radius: Theme.radius-md;
+                border-width: 1px * Theme.ui-scale;
+                border-color: root.boosted ? Theme.accent : Theme.border;
+                background: root.boosted ? #22374d : #1f2b3b;
+
+                Rectangle {
+                    x: 0px;
+                    y: 0px;
+                    width: parent.width;
+                    height: 3px * Theme.ui-scale;
+                    background: root.boosted ? Theme.accent : #59718f;
+                }
+
+                Rectangle {
+                    x: 18px * Theme.ui-scale;
+                    y: 18px * Theme.ui-scale;
+                    width: 150px * Theme.ui-scale;
+                    height: 56px * Theme.ui-scale;
+                    border-radius: 28px * Theme.ui-scale;
+                    background: root.boosted ? Theme.accent : #577190;
+                    opacity: root.boosted ? 0.14 : 0.10;
+                }
+
+                Rectangle {
+                    x: 188px * Theme.ui-scale;
+                    y: 22px * Theme.ui-scale;
+                    width: 120px * Theme.ui-scale;
+                    height: 48px * Theme.ui-scale;
+                    border-radius: 24px * Theme.ui-scale;
+                    background: root.boosted ? Theme.success : #527b70;
+                    opacity: 0.14;
+                }
+
+                Rectangle {
+                    x: 286px * Theme.ui-scale;
+                    y: 16px * Theme.ui-scale;
+                    width: 86px * Theme.ui-scale;
+                    height: 56px * Theme.ui-scale;
+                    border-radius: 28px * Theme.ui-scale;
+                    background: root.boosted ? Theme.warning : #7e6d4f;
+                    opacity: 0.14;
+                }
+
+                VerticalLayout {
+                    padding: 14px * Theme.ui-scale;
+                    spacing: 8px * Theme.ui-scale;
+
+                    HorizontalLayout {
+                        spacing: 8px * Theme.ui-scale;
+                        Rectangle { width: 18px * Theme.ui-scale; height: 18px * Theme.ui-scale; border-radius: 9px * Theme.ui-scale; background: root.boosted ? Theme.accent : #6d89ab; }
+                        Rectangle { width: 18px * Theme.ui-scale; height: 18px * Theme.ui-scale; border-radius: 9px * Theme.ui-scale; background: root.boosted ? Theme.success : #50776a; }
+                        Rectangle { width: 18px * Theme.ui-scale; height: 18px * Theme.ui-scale; border-radius: 9px * Theme.ui-scale; background: root.boosted ? Theme.warning : #7a6a47; }
+                        Rectangle { width: 18px * Theme.ui-scale; height: 18px * Theme.ui-scale; border-radius: 9px * Theme.ui-scale; background: root.boosted ? Theme.danger : #79535d; }
+                    }
+
+                    Rectangle {
+                        width: parent.width - 28px * Theme.ui-scale;
+                        height: 32px * Theme.ui-scale;
+                        border-radius: 16px * Theme.ui-scale;
+                        background: root.boosted ? #294662 : #26384d;
+
+                        HorizontalLayout {
+                            padding: 10px * Theme.ui-scale;
+                            spacing: 6px * Theme.ui-scale;
+                            Rectangle { width: root.boosted ? 120px * Theme.ui-scale : 88px * Theme.ui-scale; height: 12px * Theme.ui-scale; border-radius: 6px * Theme.ui-scale; background: root.boosted ? Theme.accent : #7190b3; }
+                            Rectangle { width: root.boosted ? 86px * Theme.ui-scale : 68px * Theme.ui-scale; height: 12px * Theme.ui-scale; border-radius: 6px * Theme.ui-scale; background: root.boosted ? Theme.success : #5d8e7f; }
+                            Rectangle { width: root.boosted ? 58px * Theme.ui-scale : 42px * Theme.ui-scale; height: 12px * Theme.ui-scale; border-radius: 6px * Theme.ui-scale; background: root.boosted ? Theme.warning : #8a764f; }
+                            Rectangle { width: root.boosted ? 42px * Theme.ui-scale : 28px * Theme.ui-scale; height: 12px * Theme.ui-scale; border-radius: 6px * Theme.ui-scale; background: root.boosted ? Theme.danger : #8a5865; }
+                        }
+                    }
+
+                    Text {
+                        text: root.boosted ? "Boosted mode pushes contrast, widens the palette bars, and makes the dashboard read more like a live system." : "Base mode keeps the same composition, but lets the theme breathe with quieter trims and softer signal bars.";
+                        color: Theme.text-muted;
+                        font-size: 11px * Theme.ui-scale;
+                        wrap: word-wrap;
+                    }
+                }
+            }
+        }
+    }
+}

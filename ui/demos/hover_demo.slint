@@ -1,0 +1,87 @@
+import { Theme } from "../theme.slint";
+import { DemoSection } from "../components/demo_section.slint";
+import { StylePreviewRow } from "../components/style_preview_row.slint";
+import { HoverCard } from "../components/hover_card.slint";
+
+// Pass 2 hover section: layered hover changes with one hero energized card.
+export component HoverDemo inherits DemoSection {
+    title: "4. Hover and Highlight";
+    subtitle: "The hover set now layers glow, sweep motion, and expanding accent rails so focus feels more cinematic.";
+
+    StylePreviewRow {
+        title: "Signal Tiles";
+        caption: "Move across the tiles to trigger ambient glow, a passing highlight beam, and an expanding status bar.";
+        HorizontalLayout {
+            spacing: Theme.space-sm;
+            HoverCard {
+                width: 170px * Theme.ui-scale;
+                height: 88px * Theme.ui-scale;
+                label: "North Cluster";
+                hint: "Hover sharpens the signal sweep";
+                accent-color: #69c2ff;
+            }
+            HoverCard {
+                width: 170px * Theme.ui-scale;
+                height: 88px * Theme.ui-scale;
+                label: "South Cluster";
+                hint: "Contrast lifts while the base rail grows";
+                accent-color: #59d7ad;
+            }
+        }
+    }
+
+    StylePreviewRow {
+        title: "Semantic Radar";
+        caption: "The same hover choreography adapts cleanly to info, warning, and risk accents.";
+        HorizontalLayout {
+            spacing: Theme.space-sm;
+            HoverCard {
+                width: 160px * Theme.ui-scale;
+                height: 92px * Theme.ui-scale;
+                label: "Info";
+                hint: "Cool beam with measured lift";
+                accent-color: Theme.accent;
+            }
+            HoverCard {
+                width: 160px * Theme.ui-scale;
+                height: 92px * Theme.ui-scale;
+                label: "Warning";
+                hint: "Amber edge for priority states";
+                accent-color: Theme.warning;
+            }
+            HoverCard {
+                width: 160px * Theme.ui-scale;
+                height: 92px * Theme.ui-scale;
+                label: "Risk";
+                hint: "Urgent highlight with stronger contrast";
+                accent-color: Theme.danger;
+            }
+        }
+    }
+
+    StylePreviewRow {
+        hero: true;
+        title: "Hero Spotlight";
+        caption: "The hero card leans into a broadcast-monitor feel with stronger glow, a visible scan pass, and a full-width floor rail.";
+        HorizontalLayout {
+            spacing: Theme.space-sm;
+
+            HoverCard {
+                width: 240px * Theme.ui-scale;
+                height: 118px * Theme.ui-scale;
+                label: "Feature Focus";
+                hint: "Hover to wake the scan band and edge rail.";
+                hero: true;
+                accent-color: Theme.accent;
+            }
+
+            HoverCard {
+                width: 180px * Theme.ui-scale;
+                height: 118px * Theme.ui-scale;
+                label: "Companion Tile";
+                hint: "Secondary tile keeps the same motion language.";
+                accent-color: #8ec5ff;
+            }
+        }
+    }
+}

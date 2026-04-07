@@ -1,0 +1,43 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="bg" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(256 256) rotate(90) scale(256)">
+      <stop offset="0" stop-color="#120202"/>
+      <stop offset="0.45" stop-color="#1E0604"/>
+      <stop offset="0.72" stop-color="#51200A"/>
+      <stop offset="1" stop-color="#FF8A1E"/>
+    </radialGradient>
+    <linearGradient id="flame" x1="78" y1="92" x2="432" y2="420" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#FFD36A"/>
+      <stop offset="0.22" stop-color="#FFB43D"/>
+      <stop offset="0.55" stop-color="#FF6D1F"/>
+      <stop offset="0.82" stop-color="#A12C08"/>
+      <stop offset="1" stop-color="#3A0B02"/>
+    </linearGradient>
+    <filter id="glow" x="-40" y="-40" width="592" height="592" filterUnits="userSpaceOnUse">
+      <feGaussianBlur stdDeviation="8" result="b"/>
+      <feMerge>
+        <feMergeNode in="b"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <circle cx="256" cy="256" r="204" fill="url(#bg)" opacity="0.9"/>
+
+  <g filter="url(#glow)" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M256 54C340 54 410 126 410 206C410 270 370 318 320 346C286 365 266 393 266 427" stroke="url(#flame)" stroke-width="36"/>
+    <path d="M266 427C266 386 288 356 330 332C378 304 412 254 412 196C412 112 344 44 262 44C198 44 140 84 112 138" stroke="#F8B446" stroke-opacity="0.72" stroke-width="12"/>
+    <path d="M112 138C84 190 88 256 132 302C164 336 214 348 246 336C276 324 288 292 278 266C268 238 236 228 212 240" stroke="url(#flame)" stroke-width="34"/>
+    <path d="M212 240C188 252 178 284 188 312C200 346 240 372 288 374C338 376 380 348 398 306" stroke="#FFDB7A" stroke-opacity="0.6" stroke-width="10"/>
+    <path d="M398 306C380 350 338 382 286 386C226 390 170 360 138 312C104 260 108 194 150 148C186 108 242 92 286 108C324 122 346 154 344 188" stroke="url(#flame)" stroke-width="28"/>
+    <path d="M344 188C342 220 320 246 290 256C254 268 212 258 184 230C154 198 152 148 188 116" stroke="#F59629" stroke-opacity="0.88" stroke-width="9"/>
+    <path d="M188 116C226 82 284 76 332 98C382 122 416 172 420 228C424 292 388 352 328 388C284 414 258 448 258 470" stroke="#FFD36A" stroke-opacity="0.72" stroke-width="7"/>
+    <path d="M190 198C216 176 256 172 288 186C320 200 338 230 338 260C338 296 312 328 276 338C240 348 196 336 170 306" stroke="#7A1E05" stroke-width="46"/>
+    <path d="M170 306C194 332 234 344 268 338C304 332 330 308 338 278C348 240 328 202 292 184" stroke="#FF8A1E" stroke-opacity="0.8" stroke-width="14"/>
+    <path d="M246 224C266 220 288 228 300 246C312 264 312 288 298 304C284 320 258 326 236 318C214 310 198 288 200 266" stroke="#2F0802" stroke-width="40"/>
+    <path d="M220 252C230 236 248 226 268 226C292 226 312 242 320 264C328 286 320 310 302 324" stroke="#FFB43D" stroke-opacity="0.76" stroke-width="8"/>
+  </g>
+
+  <circle cx="256" cy="256" r="58" fill="#070101" opacity="0.96"/>
+  <circle cx="256" cy="256" r="36" fill="#020000"/>
+</svg>

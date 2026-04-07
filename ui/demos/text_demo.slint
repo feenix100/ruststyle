@@ -1,0 +1,284 @@
+import { Theme } from "../theme.slint";
+import { DemoSection } from "../components/demo_section.slint";
+import { StylePreviewRow } from "../components/style_preview_row.slint";
+
+// Pass 2 typography section: four explicit interaction-driven text effects.
+export component TextDemo inherits DemoSection {
+    in property <float> animation-phase: 0;
+    title: "3. Text and Title Styling";
+    subtitle: "Four text examples, each with a different interactive effect: click color toggle, hover glow, hover scale, and a left-to-right hover sweep.";
+
+    StylePreviewRow {
+        title: "Click Color Change";
+        caption: "Each click advances the text through a fixed sequence of colors: red, blue, green, yellow, orange, and purple.";
+        Rectangle {
+            width: 360px * Theme.ui-scale;
+            height: 54px * Theme.ui-scale;
+            border-radius: Theme.radius-sm;
+            border-width: 1px * Theme.ui-scale;
+            border-color: click-area.pressed ? #ffd88a : Theme.border-strong;
+            background: #1b2838;
+
+            property <int> color-index: 0;
+
+            Text {
+                text: "Click to change color";
+                color:
+                    color-index == 0 ? #ff5e6a
+                    : color-index == 1 ? #5fc0ff
+                    : color-index == 2 ? #53d78b
+                    : color-index == 3 ? #ffd95b
+                    : color-index == 4 ? #ff9d42
+                    : #b47cff;
+                font-size: 21px * Theme.ui-scale;
+                font-weight: 700;
+                horizontal-alignment: center;
+                vertical-alignment: center;
+                animate color { duration: Theme.dur-normal; }
+            }
+
+            click-area := TouchArea {
+                scroll-event(event) => {
+                    if (event.modifiers.control && event.delta_y != 0px) {
+                        Theme.user-zoom = max(0.7, min(2.2, Theme.user-zoom + (event.delta_y > 0px ? 0.08 : -0.08)));
+                        return accept;
+                    }
+                    reject
+                }
+                clicked => {
+                    parent.color-index = Math.mod(parent.color-index + 1, 6);
+                }
+            }
+        }
+    }
+
+    StylePreviewRow {
+        title: "Hover Glow";
+        caption: "Hover lifts the text with layered cyan glow while the letterforms stay readable at rest.";
+        Rectangle {
+            width: 360px * Theme.ui-scale;
+            height: 58px * Theme.ui-scale;
+            border-radius: Theme.radius-sm;
+            border-width: 1px * Theme.ui-scale;
+            border-color: glow-area.has-hover ? #7dd3ff : Theme.border;
+            background: #162231;
+
+            Text {
+                text: "Hover for glow";
+                color: #4dc7ff;
+                font-size: 22px * Theme.ui-scale;
+                font-weight: 690;
+                horizontal-alignment: center;
+                vertical-alignment: center;
+                x: -2px * Theme.ui-scale;
+                y: 0px;
+                width: parent.width;
+                height: parent.height;
+                opacity: glow-area.has-hover ? 0.22 : 0.0;
+                animate opacity { duration: Theme.dur-normal; }
+            }
+
+            Text {
+                text: "Hover for glow";
+                color: #4dc7ff;
+                font-size: 22px * Theme.ui-scale;
+                font-weight: 690;
+                horizontal-alignment: center;
+                vertical-alignment: center;
+                x: 2px * Theme.ui-scale;
+                y: 0px;
+                width: parent.width;
+                height: parent.height;
+                opacity: glow-area.has-hover ? 0.22 : 0.0;
+                animate opacity { duration: Theme.dur-normal; }
+            }
+
+            Text {
+                text: "Hover for glow";
+                color: #4dc7ff;
+                font-size: 22px * Theme.ui-scale;
+                font-weight: 690;
+                horizontal-alignment: center;
+                vertical-alignment: center;
+                x: 0px;
+                y: -1px * Theme.ui-scale;
+                width: parent.width;
+                height: parent.height;
+                opacity: glow-area.has-hover ? 0.18 : 0.0;
+                animate opacity { duration: Theme.dur-normal; }
+            }
+
+            Text {
+                text: "Hover for glow";
+                color: #4dc7ff;
+                font-size: 22px * Theme.ui-scale;
+                font-weight: 690;
+                horizontal-alignment: center;
+                vertical-alignment: center;
+                x: 0px;
+                y: 1px * Theme.ui-scale;
+                width: parent.width;
+                height: parent.height;
+                opacity: glow-area.has-hover ? 0.18 : 0.0;
+                animate opacity { duration: Theme.dur-normal; }
+            }
+
+            Text {
+                text: "Hover for glow";
+                color: glow-area.has-hover ? #f4fbff : Theme.text-main;
+                font-size: 22px * Theme.ui-scale;
+                font-weight: 690;
+                horizontal-alignment: center;
+                vertical-alignment: center;
+                animate color { duration: Theme.dur-normal; }
+            }
+
+            glow-area := TouchArea {
+                scroll-event(event) => {
+                    if (event.modifiers.control && event.delta_y != 0px) {
+                        Theme.user-zoom = max(0.7, min(2.2, Theme.user-zoom + (event.delta_y > 0px ? 0.08 : -0.08)));
+                        return accept;
+                    }
+                    reject
+                }
+            }
+        }
+    }
+
+    StylePreviewRow {
+        title: "Hover Scale";
+        caption: "Hover enlarges the text noticeably so the interaction reads as a direct size response.";
+        Rectangle {
+            border-radius: Theme.radius-sm;
+            border-width: 1px * Theme.ui-scale;
+            border-color: size-area.has-hover ? #75dcb3 : Theme.border;
+            background: #152a25;
+            width: 360px * Theme.ui-scale;
+            height: 66px * Theme.ui-scale;
+
+            Text {
+                text: "Hover to grow";
+                color: size-area.has-hover ? #f4fff9 : Theme.text-main;
+                font-size: (size-area.has-hover ? 34px : 22px) * Theme.ui-scale;
+                font-weight: 760;
+                horizontal-alignment: center;
+                vertical-alignment: center;
+                animate font-size { duration: Theme.dur-normal; }
+                animate color { duration: Theme.dur-normal; }
+            }
+
+            size-area := TouchArea {
+                scroll-event(event) => {
+                    if (event.modifiers.control && event.delta_y != 0px) {
+                        Theme.user-zoom = max(0.7, min(2.2, Theme.user-zoom + (event.delta_y > 0px ? 0.08 : -0.08)));
+                        return accept;
+                    }
+                    reject
+                }
+            }
+        }
+    }
+
+    StylePreviewRow {
+        hero: true;
+        title: "Hover Gradient Sweep";
+        caption: "Hover sends repeating color bands from left to right so the text changes gradient as the sweep passes through.";
+        Rectangle {
+            width: 360px * Theme.ui-scale;
+            height: 68px * Theme.ui-scale;
+            border-radius: Theme.radius-sm;
+            border-width: 1px * Theme.ui-scale;
+            border-color: sweep-area.has-hover ? Theme.accent : Theme.border-strong;
+            background: #162434;
+            clip: true;
+
+            Text {
+                text: "Hover for gradient motion";
+                color: #6f87a1;
+                font-size: 24px * Theme.ui-scale;
+                font-weight: 760;
+                horizontal-alignment: center;
+                vertical-alignment: center;
+            }
+
+            sweep-a := Rectangle {
+                x: sweep-area.has-hover ? ((root.animation-phase * 520px * Theme.ui-scale) - 120px * Theme.ui-scale) : -180px * Theme.ui-scale;
+                y: 0px;
+                width: 120px * Theme.ui-scale;
+                height: parent.height;
+                clip: true;
+                background: #00000000;
+                opacity: sweep-area.has-hover ? 1.0 : 0.0;
+                animate opacity { duration: Theme.dur-fast; }
+
+                Text {
+                    x: -parent.x;
+                    width: 360px * Theme.ui-scale;
+                    height: parent.height;
+                    text: "Hover for gradient motion";
+                    color: #73d7ff;
+                    font-size: 24px * Theme.ui-scale;
+                    font-weight: 760;
+                    horizontal-alignment: center;
+                    vertical-alignment: center;
+                }
+            }
+
+            sweep-b := Rectangle {
+                x: sweep-area.has-hover ? ((root.animation-phase * 520px * Theme.ui-scale) - 40px * Theme.ui-scale) : -180px * Theme.ui-scale;
+                y: 0px;
+                width: 120px * Theme.ui-scale;
+                height: parent.height;
+                clip: true;
+                background: #00000000;
+                opacity: sweep-area.has-hover ? 1.0 : 0.0;
+                animate opacity { duration: Theme.dur-fast; }
+
+                Text {
+                    x: -parent.x;
+                    width: 360px * Theme.ui-scale;
+                    height: parent.height;
+                    text: "Hover for gradient motion";
+                    color: #9b8cff;
+                    font-size: 24px * Theme.ui-scale;
+                    font-weight: 760;
+                    horizontal-alignment: center;
+                    vertical-alignment: center;
+                }
+            }
+
+            sweep-c := Rectangle {
+                x: sweep-area.has-hover ? ((root.animation-phase * 520px * Theme.ui-scale) + 40px * Theme.ui-scale) : -180px * Theme.ui-scale;
+                y: 0px;
+                width: 120px * Theme.ui-scale;
+                height: parent.height;
+                clip: true;
+                background: #00000000;
+                opacity: sweep-area.has-hover ? 1.0 : 0.0;
+                animate opacity { duration: Theme.dur-fast; }
+
+                Text {
+                    x: -parent.x;
+                    width: 360px * Theme.ui-scale;
+                    height: parent.height;
+                    text: "Hover for gradient motion";
+                    color: #ffd46b;
+                    font-size: 24px * Theme.ui-scale;
+                    font-weight: 760;
+                    horizontal-alignment: center;
+                    vertical-alignment: center;
+                }
+            }
+
+            sweep-area := TouchArea {
+                scroll-event(event) => {
+                    if (event.modifiers.control && event.delta_y != 0px) {
+                        Theme.user-zoom = max(0.7, min(2.2, Theme.user-zoom + (event.delta_y > 0px ? 0.08 : -0.08)));
+                        return accept;
+                    }
+                    reject
+                }
+            }
+        }
+    }
+}

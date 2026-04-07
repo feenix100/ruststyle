@@ -1,0 +1,103 @@
+import { Theme } from "../theme.slint";
+import { DemoSection } from "../components/demo_section.slint";
+import { StylePreviewRow } from "../components/style_preview_row.slint";
+import { GlowPanel } from "../components/glow_panel.slint";
+
+// Pass 2 panel section: richer surfaces + one hero panel scan animation.
+export component PanelDemo inherits DemoSection {
+    in property <float> animation-phase: 0;
+    title: "2. Background Panels";
+    subtitle: "Each panel stays calm by default, then toggles a bold, clearly different animated background effect when clicked with the mouse.";
+
+    StylePreviewRow {
+        title: "Portal Into Hell";
+        caption: "Click to open an infernal portal with a molten ring and a dark splitting core.";
+        GlowPanel {
+            width: 330px * Theme.ui-scale;
+            height: 90px * Theme.ui-scale;
+            title: "Hell Portal";
+            subtitle: "A hot circular rift opens in the panel, with a dark center that reads like a literal portal.";
+            accent-color: #8b160f;
+            accent-color-2: #ff5b1f;
+            accent-color-3: #ffc24a;
+            panel-color: #251614;
+            hover-emphasis: false;
+            panel-style: 1;
+            animation-phase: root.animation-phase;
+        }
+    }
+
+    StylePreviewRow {
+        title: "Radioactive Glow";
+        caption: "Click to trigger a toxic green radiation bloom with a hot warning core.";
+        GlowPanel {
+            width: 330px * Theme.ui-scale;
+            height: 90px * Theme.ui-scale;
+            title: "Radioactive Core";
+            subtitle: "The panel emits an unhealthy radioactive aura with a bright warning center.";
+            accent-color: #49d24d;
+            accent-color-2: #b2ff4d;
+            accent-color-3: #e9ff8f;
+            panel-color: #162111;
+            hover-emphasis: true;
+            panel-style: 2;
+            animation-phase: root.animation-phase;
+        }
+    }
+
+    StylePreviewRow {
+        title: "Floating Bubbles";
+        caption: "Click to release bubbles that drift upward inside the panel.";
+        GlowPanel {
+            width: 330px * Theme.ui-scale;
+            height: 90px * Theme.ui-scale;
+            title: "Bubble Tank";
+            subtitle: "Different-sized bubbles rise through the panel interior, keeping the effect readable over time.";
+            accent-color: #7fe4ff;
+            accent-color-2: #d9f7ff;
+            accent-color-3: #7cc6ff;
+            panel-color: #15263a;
+            hover-emphasis: true;
+            panel-style: 3;
+            animation-phase: root.animation-phase;
+        }
+    }
+
+    StylePreviewRow {
+        title: "Kaleidoscope";
+        caption: "Click to form mirrored color shards and a jewel-like center pattern.";
+        GlowPanel {
+            width: 330px * Theme.ui-scale;
+            height: 90px * Theme.ui-scale;
+            title: "Kaleidoscope Shards";
+            subtitle: "Mirrored color blocks and a bright center create a kaleidoscope-style background composition.";
+            accent-color: #8d63ff;
+            accent-color-2: #ff63d0;
+            accent-color-3: #5fd0ff;
+            panel-color: #1f1733;
+            hover-emphasis: true;
+            panel-style: 4;
+            animation-phase: root.animation-phase;
+        }
+    }
+
+    StylePreviewRow {
+        hero: true;
+        title: "Hero Gradient Field";
+        caption: "Click to start a soft multicolor gradient field with a sliding glow passing across the panel.";
+        GlowPanel {
+            width: 340px * Theme.ui-scale;
+            height: 100px * Theme.ui-scale;
+            hero: true;
+            title: "Aurora Field";
+            subtitle: "A calmer palette of teal, lavender, apricot, and soft gold creates a more pleasing hero glow.";
+            accent-color: #74d7cf;
+            accent-color-2: #b9a7ff;
+            accent-color-3: #ffc995;
+            panel-color: #1d2433;
+            hover-emphasis: true;
+            panel-style: 5;
+            animation-phase: root.animation-phase;
+        }
+    }
+}

@@ -1,0 +1,62 @@
+import { Theme } from "../theme.slint";
+
+// Generic section wrapper used by each demo module.
+// Pass 2: stronger section framing and top accent line improve separation in recordings.
+export component DemoSection inherits Rectangle {
+    in property <string> title;
+    in property <string> subtitle;
+
+    background: Theme.panel-bg;
+    border-color: Theme.border;
+    border-width: 1px;
+    border-radius: Theme.radius-lg;
+    clip: true;
+
+    // Subtle top strip creates clearer visual grouping for each section.
+    Rectangle {
+        x: 0px;
+        y: 0px;
+        width: parent.width;
+        height: 3px * Theme.ui-scale;
+        background: #2b425f;
+    }
+
+    TouchArea {
+        scroll-event(event) => {
+            if (event.modifiers.control && event.delta_y != 0px) {
+                Theme.user-zoom = max(0.7, min(2.2, Theme.user-zoom + (event.delta_y > 0px ? 0.08 : -0.08)));
+                return accept;
+            }
+            reject
+        }
+    }
+
+    VerticalLayout {
+        spacing: Theme.space-md;
+        padding: Theme.space-lg;
+
+        Text {
+            text: root.title;
+            color: Theme.text-strong;
+            font-size: 29px * Theme.ui-scale;
+            font-weight: 710;
+            horizontal-alignment: left;
+            vertical-alignment: center;
+        }
+
+        Text {
+            text: root.subtitle;
+            color: Theme.text-muted;
+            font-size: 14px * Theme.ui-scale;
+            wrap: word-wrap;
+            horizontal-alignment: left;
+            vertical-alignment: top;
+        }
+
+        // Child content area where the section's demo rows are inserted.
+        VerticalLayout {
+            spacing: Theme.space-sm;
+            @children
+        }
+    }
+}

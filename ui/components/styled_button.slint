@@ -1,0 +1,386 @@
+import { Theme } from "../theme.slint";
+
+// Reusable styled button with hover, pressed, optional selected state, and several showcase effects.
+export component StyledButton inherits Rectangle {
+    in property <string> text;
+    in property <bool> checkable: false;
+    in-out property <bool> checked: false;
+    in property <bool> hero: false;
+    // Effect modes:
+    // 0 = standard
+    // 1 = hover glow
+    // 2 = hover spin
+    // 3 = gold highlight
+    // 4 = hover scale
+    // 5 = idle pulse + shimmer
+    in property <int> effect-mode: 0;
+    in property <float> animation-phase: 0;
+
+    in property <color> text-color: Theme.text-main;
+    in property <color> base-color: #243349;
+    in property <color> hover-color: #315277;
+    in property <color> pressed-color: #1c2a3b;
+    in property <color> selected-color: Theme.accent-soft;
+    in property <color> outline-color: Theme.border-strong;
+
+    in property <length> border-w: 1px;
+    in property <length> radius: Theme.radius-sm;
+    in property <duration> anim-duration: Theme.dur-fast;
+
+    callback clicked();
+
+    background: #00000000;
+
+    private property <bool> active:
+        touch.has-hover || touch.pressed || (checkable && checked);
+    private property <bool> glow-mode: effect-mode == 1;
+    private property <bool> spin-mode: effect-mode == 2;
+    private property <bool> gold-mode: effect-mode == 3;
+    private property <bool> scale-mode: effect-mode == 4;
+    private property <bool> pulse-mode: effect-mode == 5;
+
+    private property <color> resolved-bg:
+        touch.pressed ? pressed-color :
+        ((checkable && checked) ? selected-color :
+        (touch.has-hover ? hover-color : base-color));
+    private property <length> scale-inset:
+        scale-mode ? (touch.has-hover ? -6px * Theme.ui-scale : 8px * Theme.ui-scale) : 0px;
+    private property <length> press-offset: touch.pressed ? 2px * Theme.ui-scale : 0px;
+    private property <float> pulse-wave:
+        animation-phase < 0.5 ? animation-phase * 2 : (1.0 - animation-phase) * 2;
+    private property <float> shimmer-progress:
+        active ? animation-phase : 0.0;
+    private property <float> wave-phase-a:
+        animation-phase;
+    private property <float> wave-phase-b:
+        animation-phase + 0.2 > 1.0 ? animation-phase - 0.8 : animation-phase + 0.2;
+    private property <float> wave-phase-c:
+        animation-phase + 0.4 > 1.0 ? animation-phase - 0.6 : animation-phase + 0.4;
+    private property <float> wave-phase-d:
+        animation-phase + 0.6 > 1.0 ? animation-phase - 0.4 : animation-phase + 0.6;
+    private property <float> wave-phase-e:
+        animation-phase + 0.8 > 1.0 ? animation-phase - 0.2 : animation-phase + 0.8;
+    private property <float> wave-a:
+        wave-phase-a < 0.5 ? wave-phase-a * 2 : (1.0 - wave-phase-a) * 2;
+    private property <float> wave-b:
+        wave-phase-b < 0.5 ? wave-phase-b * 2 : (1.0 - wave-phase-b) * 2;
+    private property <float> wave-c:
+        wave-phase-c < 0.5 ? wave-phase-c * 2 : (1.0 - wave-phase-c) * 2;
+    private property <float> wave-d:
+        wave-phase-d < 0.5 ? wave-phase-d * 2 : (1.0 - wave-phase-d) * 2;
+    private property <float> wave-e:
+        wave-phase-e < 0.5 ? wave-phase-e * 2 : (1.0 - wave-phase-e) * 2;
+
+    Rectangle {
+        x: -10px * Theme.ui-scale;
+        y: -10px * Theme.ui-scale;
+        width: parent.width + 20px * Theme.ui-scale;
+        height: parent.height + 20px * Theme.ui-scale;
+        border-radius: root.radius + 10px * Theme.ui-scale;
+        background:
+            root.glow-mode
+            ? (touch.has-hover ? #3565d8ff : #12000000)
+            : (root.pulse-mode
+                ? #26a8ffff
+                : #00000000);
+        opacity:
+            root.glow-mode
+            ? (touch.has-hover ? 0.95 : 0.0)
+            : (root.pulse-mode ? (root.active ? 0.28 + root.pulse-wave * 0.54 : 0.0) : 0.0);
+        animate opacity { duration: root.anim-duration; }
+    }
+
+    surface := Rectangle {
+        x: root.scale-inset;
+        y: root.scale-inset + root.press-offset;
+        width: root.width - root.scale-inset * 2;
+        height: root.height - root.scale-inset * 2;
+        background:
+            root.gold-mode && root.active ? #7a5a19 :
+            root.gold-mode ? #3a2c15 :
+            root.resolved-bg;
+        border-radius: root.radius;
+        border-width: touch.pressed ? root.border-w + 1px * Theme.ui-scale : root.border-w;
+        border-color:
+            root.gold-mode && root.active ? #f8d982 :
+            root.gold-mode ? #8e6b28 :
+            (root.active ? Theme.accent : root.outline-color);
+        clip: true;
+
+        animate x { duration: Theme.dur-normal; }
+        animate y { duration: Theme.dur-fast; }
+        animate width { duration: Theme.dur-normal; }
+        animate height { duration: Theme.dur-normal; }
+        animate background { duration: root.anim-duration; }
+        animate border-color { duration: root.anim-duration; }
+        animate border-width { duration: root.anim-duration; }
+
+        Rectangle {
+            x: 30px * Theme.ui-scale;
+            y: 7px * Theme.ui-scale;
+            width: parent.width - 68px * Theme.ui-scale;
+            height: parent.height - 14px * Theme.ui-scale;
+            border-radius: root.radius - 2px * Theme.ui-scale;
+            background: root.pulse-mode && root.active ? #12ff8a5b : #00000000;
+            opacity: root.pulse-mode && root.active ? 1.0 : 0.0;
+            animate opacity { duration: root.anim-duration; }
+
+            Rectangle {
+                x: 10px * Theme.ui-scale;
+                width: 8px * Theme.ui-scale;
+                height: root.pulse-mode && root.active ? ((8px + root.wave-a * 12px) * Theme.ui-scale) : 0px;
+                y: parent.height / 2 - self.height / 2;
+                border-radius: 4px * Theme.ui-scale;
+                background: #ff8a5b;
+                opacity: root.pulse-mode && root.active ? 0.95 : 0.0;
+                animate height { duration: 120ms; }
+                animate y { duration: 120ms; }
+                animate opacity { duration: root.anim-duration; }
+            }
+
+            Rectangle {
+                x: 25px * Theme.ui-scale;
+                width: 8px * Theme.ui-scale;
+                height: root.pulse-mode && root.active ? ((8px + root.wave-b * 12px) * Theme.ui-scale) : 0px;
+                y: parent.height / 2 - self.height / 2;
+                border-radius: 4px * Theme.ui-scale;
+                background: #ff8a5b;
+                opacity: root.pulse-mode && root.active ? 0.95 : 0.0;
+                animate height { duration: 120ms; }
+                animate y { duration: 120ms; }
+                animate opacity { duration: root.anim-duration; }
+            }
+
+            Rectangle {
+                x: 40px * Theme.ui-scale;
+                width: 8px * Theme.ui-scale;
+                height: root.pulse-mode && root.active ? ((8px + root.wave-c * 12px) * Theme.ui-scale) : 0px;
+                y: parent.height / 2 - self.height / 2;
+                border-radius: 4px * Theme.ui-scale;
+                background: #ff8a5b;
+                opacity: root.pulse-mode && root.active ? 0.95 : 0.0;
+                animate height { duration: 120ms; }
+                animate y { duration: 120ms; }
+                animate opacity { duration: root.anim-duration; }
+            }
+
+            Rectangle {
+                x: 55px * Theme.ui-scale;
+                width: 8px * Theme.ui-scale;
+                height: root.pulse-mode && root.active ? ((8px + root.wave-d * 12px) * Theme.ui-scale) : 0px;
+                y: parent.height / 2 - self.height / 2;
+                border-radius: 4px * Theme.ui-scale;
+                background: #ff8a5b;
+                opacity: root.pulse-mode && root.active ? 0.95 : 0.0;
+                animate height { duration: 120ms; }
+                animate y { duration: 120ms; }
+                animate opacity { duration: root.anim-duration; }
+            }
+
+            Rectangle {
+                x: 70px * Theme.ui-scale;
+                width: 8px * Theme.ui-scale;
+                height: root.pulse-mode && root.active ? ((8px + root.wave-e * 12px) * Theme.ui-scale) : 0px;
+                y: parent.height / 2 - self.height / 2;
+                border-radius: 4px * Theme.ui-scale;
+                background: #ff8a5b;
+                opacity: root.pulse-mode && root.active ? 0.95 : 0.0;
+                animate height { duration: 120ms; }
+                animate y { duration: 120ms; }
+                animate opacity { duration: root.anim-duration; }
+            }
+        }
+
+        Rectangle {
+            x: 10px * Theme.ui-scale;
+            y: 10px * Theme.ui-scale;
+            width: parent.width - 20px * Theme.ui-scale;
+            height: parent.height - 20px * Theme.ui-scale;
+            border-radius: root.radius - 2px * Theme.ui-scale;
+            background: #00000000;
+            border-width:
+                root.glow-mode ? 1px * Theme.ui-scale :
+                root.scale-mode ? 1.5px * Theme.ui-scale :
+                root.pulse-mode ? 1px * Theme.ui-scale :
+                0px;
+            border-color:
+                root.glow-mode ? (root.active ? #6fe1ff : #3a6180) :
+                root.scale-mode ? (root.active ? #81efd0 : #46695f) :
+                root.pulse-mode ? (root.active ? #8fe7ff : #3e6982) :
+                #00000000;
+            opacity:
+                root.glow-mode || root.scale-mode || root.pulse-mode
+                ? (root.active ? 1.0 : 0.65)
+                : 0.0;
+            animate border-color { duration: root.anim-duration; }
+            animate opacity { duration: root.anim-duration; }
+        }
+
+        Rectangle {
+            x:
+                root.gold-mode
+                ? (root.active ? surface.width - 18px * Theme.ui-scale : -54px * Theme.ui-scale)
+                : (root.pulse-mode
+                    ? (-54px * Theme.ui-scale + (surface.width + 54px * Theme.ui-scale) * root.shimmer-progress)
+                    : ((root.hero && root.active) ? surface.width : -54px * Theme.ui-scale));
+            y: 0px;
+            width: (root.gold-mode ? 44px : (root.pulse-mode ? 54px : 40px)) * Theme.ui-scale;
+            height: parent.height;
+            background: root.gold-mode ? #5ff4d27e : (root.pulse-mode ? #72fff2ff : #58ffffff);
+            opacity:
+                root.gold-mode ? (root.active ? 0.9 : 0.0)
+                : (root.pulse-mode ? (root.active ? 0.52 : 0.0) : (root.hero && root.active ? 0.24 : 0.0));
+            animate x {
+                duration: root.gold-mode ? 560ms : (root.pulse-mode ? 520ms : Theme.dur-hero);
+                easing: linear;
+            }
+            animate opacity { duration: root.anim-duration; }
+        }
+
+        Rectangle {
+            x: 14px * Theme.ui-scale;
+            y: parent.height / 2 - 5px * Theme.ui-scale;
+            width: 10px * Theme.ui-scale;
+            height: 10px * Theme.ui-scale;
+            border-radius: 5px * Theme.ui-scale;
+            background:
+                root.glow-mode ? (root.active ? #7be4ff : #325572) :
+                root.pulse-mode ? (root.active ? #7df1ff : #375f78) :
+                root.gold-mode ? (root.active ? #ffdf88 : #8a6c32) :
+                #00000000;
+            opacity: root.glow-mode || root.pulse-mode || root.gold-mode ? 1.0 : 0.0;
+            animate background { duration: root.anim-duration; }
+        }
+
+        Rectangle {
+            x: 11px * Theme.ui-scale;
+            y: parent.height / 2 - 8px * Theme.ui-scale;
+            width: 16px * Theme.ui-scale;
+            height: 16px * Theme.ui-scale;
+            border-radius: 8px * Theme.ui-scale;
+            background: #00000000;
+            border-width: root.glow-mode || root.pulse-mode ? 1px * Theme.ui-scale : 0px;
+            border-color:
+                root.glow-mode ? (root.active ? #7be4ff : #34556c) :
+                root.pulse-mode ? (root.active ? #78efff : #345a70) :
+                #00000000;
+            opacity: root.glow-mode || root.pulse-mode ? (root.active ? 1.0 : 0.7) : 0.0;
+            animate border-color { duration: root.anim-duration; }
+            animate opacity { duration: root.anim-duration; }
+        }
+
+        Rectangle {
+            x: 8px * Theme.ui-scale;
+            y: parent.height / 2 - 11px * Theme.ui-scale;
+            width: 22px * Theme.ui-scale;
+            height: 22px * Theme.ui-scale;
+            border-radius: 11px * Theme.ui-scale;
+            background: #00000000;
+            border-width: root.pulse-mode ? 1px * Theme.ui-scale : 0px;
+            border-color: root.pulse-mode ? #7ff4ff : #00000000;
+            opacity: root.pulse-mode ? (root.active ? (0.2 + root.pulse-wave * 0.7) : 0.0) : 0.0;
+            animate opacity { duration: 120ms; }
+        }
+
+        Rectangle {
+            x: 5px * Theme.ui-scale;
+            y: parent.height / 2 - 14px * Theme.ui-scale;
+            width: 28px * Theme.ui-scale;
+            height: 28px * Theme.ui-scale;
+            border-radius: 14px * Theme.ui-scale;
+            background: #00000000;
+            border-width: root.pulse-mode ? 1px * Theme.ui-scale : 0px;
+            border-color: root.pulse-mode ? #44fff0 : #00000000;
+            opacity: root.pulse-mode ? (root.active ? (0.08 + root.pulse-wave * 0.48) : 0.0) : 0.0;
+            animate opacity { duration: 120ms; }
+        }
+
+        Rectangle {
+            x: parent.width - 28px * Theme.ui-scale;
+            width: 3px * Theme.ui-scale;
+            height: root.scale-mode ? ((root.active ? 16px : 10px) * Theme.ui-scale) : (root.pulse-mode ? ((root.active ? 8px + root.pulse-wave * 8px : 8px) * Theme.ui-scale) : 0px);
+            border-radius: 2px * Theme.ui-scale;
+            background:
+                root.scale-mode ? (root.active ? #87efd2 : #4d7267) :
+                root.pulse-mode ? (root.active ? #89f2ff : #436b84) :
+                #00000000;
+            y: parent.height / 2 - self.height / 2;
+            opacity: root.scale-mode || root.pulse-mode ? 1.0 : 0.0;
+            animate height { duration: root.anim-duration; }
+            animate y { duration: root.anim-duration; }
+            animate background { duration: root.anim-duration; }
+        }
+
+        Rectangle {
+            x: parent.width - 22px * Theme.ui-scale;
+            width: 3px * Theme.ui-scale;
+            height: root.scale-mode ? ((root.active ? 12px : 7px) * Theme.ui-scale) : (root.pulse-mode ? ((root.active ? 12px + root.pulse-wave * 6px : 10px) * Theme.ui-scale) : 0px);
+            border-radius: 2px * Theme.ui-scale;
+            background:
+                root.scale-mode ? (root.active ? #87efd2 : #4d7267) :
+                root.pulse-mode ? (root.active ? #89f2ff : #436b84) :
+                #00000000;
+            y: parent.height / 2 - self.height / 2;
+            opacity: root.scale-mode || root.pulse-mode ? 1.0 : 0.0;
+            animate height { duration: root.anim-duration; }
+            animate y { duration: root.anim-duration; }
+            animate background { duration: root.anim-duration; }
+        }
+
+        Rectangle {
+            x: parent.width - 16px * Theme.ui-scale;
+            width: 3px * Theme.ui-scale;
+            height: root.scale-mode ? ((root.active ? 8px : 4px) * Theme.ui-scale) : (root.pulse-mode ? ((root.active ? 16px + root.pulse-wave * 4px : 12px) * Theme.ui-scale) : 0px);
+            border-radius: 2px * Theme.ui-scale;
+            background:
+                root.scale-mode ? (root.active ? #87efd2 : #4d7267) :
+                root.pulse-mode ? (root.active ? #89f2ff : #436b84) :
+                #00000000;
+            y: parent.height / 2 - self.height / 2;
+            opacity: root.scale-mode || root.pulse-mode ? 1.0 : 0.0;
+            animate height { duration: root.anim-duration; }
+            animate y { duration: root.anim-duration; }
+            animate background { duration: root.anim-duration; }
+        }
+
+        Rectangle {
+            x: parent.width - 22px * Theme.ui-scale;
+            y: 10px * Theme.ui-scale;
+            width: 8px * Theme.ui-scale;
+            height: 8px * Theme.ui-scale;
+            border-radius: 4px * Theme.ui-scale;
+            background: root.gold-mode ? (root.active ? #ffe89d : #926c2a) : #00000000;
+            opacity: root.gold-mode ? 1.0 : 0.0;
+            animate background { duration: root.anim-duration; }
+        }
+
+        Text {
+            text: root.text;
+            color:
+                root.gold-mode
+                ? (root.active ? #fff6d8 : #f3e4bd)
+                : (root.active ? Theme.text-strong : root.text-color);
+            font-size: 14px * Theme.ui-scale;
+            font-weight: root.active ? 700 : 610;
+            horizontal-alignment: center;
+            vertical-alignment: center;
+            animate color { duration: root.anim-duration; }
+        }
+    }
+
+    touch := TouchArea {
+        scroll-event(event) => {
+            if (event.modifiers.control && event.delta_y != 0px) {
+                Theme.user-zoom = max(0.7, min(2.2, Theme.user-zoom + (event.delta_y > 0px ? 0.08 : -0.08)));
+                return accept;
+            }
+            reject
+        }
+        clicked => {
+            if (root.checkable) {
+                root.checked = !root.checked;
+            }
+            root.clicked();
+        }
+    }
+}

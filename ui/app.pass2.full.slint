@@ -1,0 +1,77 @@
+import { ScrollView } from "std-widgets.slint";
+import { Theme } from "theme.slint";
+
+import { ButtonDemo } from "demos/button_demo.slint";
+import { PanelDemo } from "demos/panel_demo.slint";
+import { TextDemo } from "demos/text_demo.slint";
+import { HoverDemo } from "demos/hover_demo.slint";
+import { MotionDemo } from "demos/motion_demo.slint";
+import { ThemeDemo } from "demos/theme_demo.slint";
+
+// Root app window for Rust UI Style Playground.
+// Pass 2 keeps the architecture but increases polish, separation, and presentation quality.
+export component AppWindow inherits Window {
+    title: "Rust UI Style Playground - Pass 2";
+    width: 1220px;
+    height: 940px;
+    background: Theme.app-bg;
+
+    Rectangle {
+        background: Theme.app-bg;
+
+        // Dual-layer header background improves depth without visual clutter.
+        Rectangle {
+            x: 0px;
+            y: 0px;
+            width: parent.width;
+            height: 170px;
+            background: #152132;
+        }
+
+        Rectangle {
+            x: 0px;
+            y: 0px;
+            width: parent.width;
+            height: 66px;
+            background: Theme.app-bg-deep;
+        }
+
+        VerticalLayout {
+            spacing: Theme.space-md;
+            padding: Theme.space-xl;
+
+            Text {
+                text: "Rust UI Style Playground";
+                color: Theme.text-strong;
+                font-size: 36px;
+                font-weight: 760;
+                horizontal-alignment: left;
+                vertical-alignment: center;
+            }
+
+            Text {
+                text: "Pass 2: stronger polish, clearer interactions, and one hero animation in every section using reusable Slint components.";
+                color: Theme.text-muted;
+                font-size: 15px;
+                wrap: word-wrap;
+                horizontal-alignment: left;
+                vertical-alignment: top;
+            }
+
+            // Scrollable body keeps all sections visible in a single window.
+            ScrollView {
+                VerticalLayout {
+                    spacing: Theme.space-md;
+                    padding-right: Theme.space-sm;
+
+                    ButtonDemo {}
+                    PanelDemo {}
+                    TextDemo {}
+                    HoverDemo {}
+                    MotionDemo {}
+                    ThemeDemo {}
+                }
+            }
+        }
+    }
+}

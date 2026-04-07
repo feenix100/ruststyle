@@ -1,0 +1,105 @@
+import { Theme } from "../theme.slint";
+import { DemoSection } from "../components/demo_section.slint";
+import { SpinImageButton } from "../components/spin_image_button.slint";
+import { StylePreviewRow } from "../components/style_preview_row.slint";
+import { StyledButton } from "../components/styled_button.slint";
+
+// Button section reworked to showcase five explicit interaction styles.
+export component ButtonDemo inherits DemoSection {
+    in property <float> animation-phase: 0;
+    title: "1. Button Styles";
+    subtitle: "Five distinct button behaviors that read as normal buttons at rest and reveal their special motion or lighting only on hover.";
+
+    StylePreviewRow {
+        title: "Glow Hover";
+        caption: "Hover adds a soft electric halo outside the button so the call to action lifts off the panel immediately.";
+        HorizontalLayout {
+            spacing: Theme.space-sm;
+            StyledButton {
+                text: "Glow Hover";
+                effect-mode: 1;
+                base-color: #224363;
+                hover-color: #2e6da0;
+                pressed-color: #1a3650;
+                outline-color: #7ecfff;
+                animation-phase: root.animation-phase;
+                width: 152px * Theme.ui-scale;
+                height: 44px * Theme.ui-scale;
+            }
+        }
+    }
+
+    StylePreviewRow {
+        title: "Center Spin";
+        caption: "Hover triggers a full 360 degree spin around the button center while keeping the click target stable.";
+        HorizontalLayout {
+            spacing: Theme.space-sm;
+            SpinImageButton {
+                width: 152px * Theme.ui-scale;
+                height: 44px * Theme.ui-scale;
+            }
+        }
+    }
+
+    StylePreviewRow {
+        title: "Gold Sweep";
+        caption: "Hover warms the button into a premium gold finish and sends a polished highlight sweep across the face.";
+        HorizontalLayout {
+            spacing: Theme.space-sm;
+            StyledButton {
+                text: "Gold Sweep";
+                effect-mode: 3;
+                base-color: #352814;
+                hover-color: #6d5120;
+                pressed-color: #2a1f10;
+                outline-color: #a98133;
+                animation-phase: root.animation-phase;
+                width: 152px * Theme.ui-scale;
+                height: 44px * Theme.ui-scale;
+            }
+        }
+    }
+
+    StylePreviewRow {
+        title: "Scale Bounce";
+        caption: "The button grows while hovered and settles back down when the pointer leaves, creating a clear size response.";
+        HorizontalLayout {
+            spacing: Theme.space-sm;
+            StyledButton {
+                text: "Scale Hover";
+                effect-mode: 4;
+                base-color: #1f4a42;
+                hover-color: #2f776a;
+                pressed-color: #173831;
+                outline-color: #63d1b2;
+                animation-phase: root.animation-phase;
+                width: 152px * Theme.ui-scale;
+                height: 44px * Theme.ui-scale;
+            }
+        }
+    }
+
+    StylePreviewRow {
+        hero: true;
+        title: "Pulse + Shimmer";
+        caption: "Hover turns this into a broadcast control: a live beacon appears on the left, a waveform wakes up in the center, and a scan passes through the button.";
+        HorizontalLayout {
+            spacing: Theme.space-sm;
+            StyledButton {
+                text: "Broadcast";
+                hero: true;
+                effect-mode: 5;
+                base-color: #173c58;
+                hover-color: #1e4d69;
+                pressed-color: #132f45;
+                selected-color: #2b8ac2;
+                outline-color: Theme.accent;
+                border-w: 2px;
+                animation-phase: root.animation-phase;
+                width: 160px * Theme.ui-scale;
+                height: 44px * Theme.ui-scale;
+                anim-duration: Theme.dur-normal;
+            }
+        }
+    }
+}

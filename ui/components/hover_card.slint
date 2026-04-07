@@ -1,0 +1,137 @@
+import { Theme } from "../theme.slint";
+
+// Compact card used in hover-focused demos.
+// Pass 2 upgrades: coordinated hover layers (border, fill, and corner accents).
+export component HoverCard inherits Rectangle {
+    in property <string> label;
+    in property <string> hint;
+    in property <color> accent-color: Theme.accent;
+    in property <bool> hero: false;
+
+    private property <length> edge-padding: 6px * Theme.ui-scale;
+    private property <length> accent-thickness: 2px * Theme.ui-scale;
+    private property <length> ambient-inset: 10px * Theme.ui-scale;
+    private property <float> hover-boost: area.has-hover ? 1.0 : 0.0;
+
+    border-radius: Theme.radius-sm;
+    border-width: (area.has-hover ? 2px : 1px) * Theme.ui-scale;
+    border-color: area.has-hover ? accent-color : Theme.border;
+    background: area.has-hover ? #263a53 : Theme.panel-bg-soft;
+
+    animate border-color { duration: Theme.dur-normal; }
+    animate border-width { duration: Theme.dur-normal; }
+    animate background { duration: Theme.dur-normal; }
+
+    Rectangle {
+        x: -ambient-inset;
+        y: -ambient-inset;
+        width: parent.width + ambient-inset * 2;
+        height: parent.height + ambient-inset * 2;
+        border-radius: Theme.radius-md + ambient-inset;
+        background: accent-color;
+        opacity: area.has-hover ? (hero ? 0.18 : 0.10) : 0.0;
+        animate opacity { duration: Theme.dur-normal; }
+    }
+
+    Rectangle {
+        x: edge-padding;
+        y: edge-padding;
+        width: area.has-hover ? 22px * Theme.ui-scale : 8px * Theme.ui-scale;
+        height: accent-thickness;
+        background: accent-color;
+        animate width { duration: Theme.dur-normal; }
+    }
+
+    Rectangle {
+        x: edge-padding;
+        y: edge-padding;
+        width: accent-thickness;
+        height: area.has-hover ? 22px * Theme.ui-scale : 8px * Theme.ui-scale;
+        background: accent-color;
+        animate height { duration: Theme.dur-normal; }
+    }
+
+    Rectangle {
+        x: parent.width - 4px * Theme.ui-scale;
+        y: edge-padding;
+        width: accent-thickness;
+        height: hero ? (area.has-hover ? parent.height - edge-padding * 2 : 20px * Theme.ui-scale) : 0px;
+        background: accent-color;
+        animate height { duration: Theme.dur-hero; }
+    }
+
+    Rectangle {
+        x: area.has-hover ? parent.width - 72px * Theme.ui-scale : -86px * Theme.ui-scale;
+        y: 0px;
+        width: 64px * Theme.ui-scale;
+        height: parent.height;
+        background: accent-color;
+        opacity: hero ? (area.has-hover ? 0.22 : 0.0) : (area.has-hover ? 0.12 : 0.0);
+        animate x { duration: hero ? Theme.dur-hero : Theme.dur-normal; easing: linear; }
+        animate opacity { duration: Theme.dur-normal; }
+    }
+
+    Rectangle {
+        x: Theme.space-sm;
+        y: parent.height - 10px * Theme.ui-scale;
+        width: area.has-hover ? parent.width - Theme.space-sm * 2 : 48px * Theme.ui-scale;
+        height: 3px * Theme.ui-scale;
+        border-radius: 2px * Theme.ui-scale;
+        background: accent-color;
+        opacity: hero ? 1.0 : 0.75 + hover-boost * 0.25;
+        animate width { duration: Theme.dur-normal; }
+    }
+
+    VerticalLayout {
+        spacing: Theme.space-xs;
+        padding: Theme.space-sm;
+
+        HorizontalLayout {
+            spacing: 6px * Theme.ui-scale;
+
+            Rectangle {
+                width: 8px * Theme.ui-scale;
+                height: 8px * Theme.ui-scale;
+                border-radius: 4px * Theme.ui-scale;
+                background: accent-color;
+            }
+
+            Text {
+                text: hero ? "Spotlight" : "Hover State";
+                color: area.has-hover ? Theme.text-strong : Theme.text-muted;
+                font-size: 11px * Theme.ui-scale;
+                font-weight: 680;
+                horizontal-alignment: left;
+                vertical-alignment: center;
+            }
+        }
+
+        Text {
+            text: hero ? label + " (Hero)" : label;
+            color: area.has-hover ? Theme.text-strong : Theme.text-main;
+            font-size: 14px * Theme.ui-scale;
+            font-weight: area.has-hover ? 700 : 620;
+            horizontal-alignment: left;
+            vertical-alignment: center;
+        }
+
+        Text {
+            text: hint;
+            color: Theme.text-muted;
+            font-size: 12px * Theme.ui-scale;
+            wrap: word-wrap;
+            horizontal-alignment: left;
+            vertical-alignment: top;
+        }
+    }
+
+    area := TouchArea {
+        scroll-event(event) => {
+            if (event.modifiers.control && event.delta_y != 0px) {
+                Theme.user-zoom = max(0.7, min(2.2, Theme.user-zoom + (event.delta_y > 0px ? 0.08 : -0.08)));
+                return accept;
+            }
+            reject
+        }
+    }
+}

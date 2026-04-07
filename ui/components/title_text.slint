@@ -1,0 +1,16 @@
+import { Theme } from "../theme.slint";
+
+// Reusable title component for section headers and emphasized labels.
+// Pass 2: optional accent-bar treatment makes headings feel more designed.
+export component TitleText inherits Text {
+    in property <string> label;
+    in property <bool> emphasized: false;
+    in property <color> tone: Theme.text-main;
+
+    text: label;
+    color: emphasized ? Theme.text-strong : tone;
+    font-size: (emphasized ? 24px : 18px) * Theme.ui-scale;
+    font-weight: emphasized ? 710 : 610;
+    horizontal-alignment: left;
+    vertical-alignment: center;
+}

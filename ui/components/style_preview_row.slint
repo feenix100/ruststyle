@@ -1,0 +1,51 @@
+import { Theme } from "../theme.slint";
+import { DemoCaption } from "demo_caption.slint";
+
+// Row layout used by all sections: left text explanation + right live preview.
+// Pass 2 strengthens card depth and hero contrast while keeping reusable structure.
+export component StylePreviewRow inherits Rectangle {
+    in property <string> title;
+    in property <string> caption;
+    in property <bool> hero: false;
+
+    background: hero ? Theme.panel-bg-hero : Theme.panel-bg-soft;
+    border-color: hero ? Theme.accent : Theme.border;
+    border-width: hero ? 2px : 1px;
+    border-radius: Theme.radius-md;
+    clip: true;
+    min-height: (hero ? 132px : 118px) * Theme.ui-scale;
+
+    animate background { duration: Theme.dur-normal; }
+    animate border-color { duration: Theme.dur-normal; }
+
+    HorizontalLayout {
+        spacing: Theme.space-md;
+        padding: Theme.space-md;
+
+        VerticalLayout {
+            min-width: 300px * Theme.ui-scale;
+            spacing: Theme.space-xs;
+
+            Text {
+                text: hero ? title + "  [Hero Demo]" : title;
+                color: Theme.text-main;
+                font-size: 16px * Theme.ui-scale;
+                font-weight: 670;
+                horizontal-alignment: left;
+                vertical-alignment: center;
+            }
+
+            DemoCaption {
+                caption: root.caption;
+            }
+        }
+
+        Rectangle {
+            background: #00000000;
+            border-radius: Theme.radius-sm;
+            min-width: 260px * Theme.ui-scale;
+            horizontal-stretch: 1;
+            @children
+        }
+    }
+}

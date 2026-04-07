@@ -1,0 +1,439 @@
+import { Theme } from "../theme.slint";
+
+// Panel component with configurable accent + optional hover emphasis.
+// Pass 2 upgrades: soft glow field + hero scan line for premium panel polish.
+export component GlowPanel inherits Rectangle {
+    in property <string> title;
+    in property <string> subtitle;
+    in property <bool> hover-emphasis: true;
+    in property <bool> hero: false;
+    in-out property <bool> activated: false;
+    in property <int> panel-style: 0;
+    in property <float> animation-phase: 0;
+
+    in property <color> panel-color: Theme.panel-bg-soft;
+    in property <color> accent-color: Theme.accent;
+    in property <color> accent-color-2: #ffffff;
+    in property <color> accent-color-3: #ffffff;
+
+    border-radius: Theme.radius-md;
+    clip: true;
+
+    private property <color> resolved-bg:
+        activated ? #00000000 : panel-color;
+    private property <bool> active: activated;
+    private property <float> drift-a: animation-phase;
+    private property <float> drift-b: animation-phase + 0.33 > 1.0 ? animation-phase - 0.67 : animation-phase + 0.33;
+    private property <float> drift-c: animation-phase + 0.66 > 1.0 ? animation-phase - 0.34 : animation-phase + 0.66;
+    private property <float> drift-d: animation-phase + 0.18 > 1.0 ? animation-phase - 0.82 : animation-phase + 0.18;
+    private property <float> drift-e: animation-phase + 0.52 > 1.0 ? animation-phase - 0.48 : animation-phase + 0.52;
+
+    background: resolved-bg;
+    border-color: active ? accent-color : Theme.border;
+    border-width: hero ? ((active ? 2px : 1px) * Theme.ui-scale) : ((active ? 1.5px : 1px) * Theme.ui-scale);
+
+    animate background { duration: Theme.dur-normal; }
+    animate border-color { duration: Theme.dur-normal; }
+    animate border-width { duration: Theme.dur-normal; }
+
+    Rectangle {
+        x: 0px;
+        y: 0px;
+        width: parent.width;
+        height: parent.height;
+        background: #00000000;
+        clip: true;
+
+        Rectangle {
+            // Hell portal
+            x: parent.width / 2 - 104px * Theme.ui-scale;
+            y: parent.height / 2 - 44px * Theme.ui-scale;
+            width: 208px * Theme.ui-scale;
+            height: 88px * Theme.ui-scale;
+            border-radius: 44px * Theme.ui-scale;
+            background: #00000000;
+            opacity: panel-style == 1 ? (active ? 1.0 : 0.0) : 0.0;
+            clip: true;
+
+            Rectangle {
+                x: parent.width / 2 - 104px * Theme.ui-scale;
+                y: parent.height / 2 - 104px * Theme.ui-scale;
+                width: 208px * Theme.ui-scale;
+                height: 208px * Theme.ui-scale;
+                border-radius: 104px * Theme.ui-scale;
+                background: accent-color;
+                opacity: 0.10 + drift-a * 0.05;
+            }
+
+            Rectangle {
+                x: parent.width / 2 - 86px * Theme.ui-scale;
+                y: parent.height / 2 - 86px * Theme.ui-scale;
+                width: 172px * Theme.ui-scale;
+                height: 172px * Theme.ui-scale;
+                border-radius: 86px * Theme.ui-scale;
+                background: accent-color-2;
+                opacity: 0.14 + drift-b * 0.06;
+            }
+
+            Rectangle {
+                x: parent.width / 2 - 68px * Theme.ui-scale;
+                y: parent.height / 2 - 68px * Theme.ui-scale;
+                width: 136px * Theme.ui-scale;
+                height: 136px * Theme.ui-scale;
+                border-radius: 68px * Theme.ui-scale;
+                background: accent-color-3;
+                opacity: 0.18 + drift-c * 0.06;
+            }
+
+            Image {
+                x: parent.width / 2 - 86px * Theme.ui-scale;
+                y: parent.height / 2 - 86px * Theme.ui-scale;
+                width: 172px * Theme.ui-scale;
+                height: 172px * Theme.ui-scale;
+                source: @image-url("../assets/portal-swirl.svg");
+                opacity: 0.88;
+                rotation-angle: active ? animation-phase * 360deg : 0deg;
+                rotation-origin-x: self.width / 2;
+                rotation-origin-y: self.height / 2;
+                animate rotation-angle { duration: 0ms; }
+            }
+
+            Image {
+                x: parent.width / 2 - 58px * Theme.ui-scale;
+                y: parent.height / 2 - 58px * Theme.ui-scale;
+                width: 116px * Theme.ui-scale;
+                height: 116px * Theme.ui-scale;
+                source: @image-url("../assets/portal-swirl.svg");
+                opacity: 0.64;
+                rotation-angle: active ? (-animation-phase * 360deg) : 0deg;
+                rotation-origin-x: self.width / 2;
+                rotation-origin-y: self.height / 2;
+                animate rotation-angle { duration: 0ms; }
+            }
+
+            Rectangle {
+                x: parent.width / 2 - 34px * Theme.ui-scale;
+                y: parent.height / 2 - 34px * Theme.ui-scale;
+                width: 68px * Theme.ui-scale;
+                height: 68px * Theme.ui-scale;
+                border-radius: 34px * Theme.ui-scale;
+                background: #120404;
+                opacity: 0.90;
+            }
+            Rectangle {
+                x: parent.width / 2 - 20px * Theme.ui-scale;
+                y: parent.height / 2 - 20px * Theme.ui-scale;
+                width: 40px * Theme.ui-scale;
+                height: 40px * Theme.ui-scale;
+                border-radius: 20px * Theme.ui-scale;
+                background: #040101;
+                opacity: 0.96;
+            }
+        }
+
+        // Radioactive glow
+        Rectangle {
+            x: 88px * Theme.ui-scale;
+            y: 14px * Theme.ui-scale;
+            width: 150px * Theme.ui-scale;
+            height: 62px * Theme.ui-scale;
+            border-radius: 31px * Theme.ui-scale;
+            background: accent-color;
+            opacity: panel-style == 2 ? (active ? 0.10 + drift-a * 0.08 : 0.0) : 0.0;
+        }
+        Rectangle {
+            x: 118px * Theme.ui-scale;
+            y: 8px * Theme.ui-scale;
+            width: 94px * Theme.ui-scale;
+            height: 74px * Theme.ui-scale;
+            border-radius: 37px * Theme.ui-scale;
+            background: accent-color-2;
+            opacity: panel-style == 2 ? (active ? 0.08 + drift-b * 0.08 : 0.0) : 0.0;
+        }
+        Rectangle {
+            x: 112px * Theme.ui-scale;
+            y: 28px * Theme.ui-scale;
+            width: 28px * Theme.ui-scale;
+            height: 28px * Theme.ui-scale;
+            border-radius: 14px * Theme.ui-scale;
+            background: accent-color-3;
+            opacity: panel-style == 2 ? (active ? 0.22 : 0.0) : 0.0;
+        }
+        Rectangle {
+            x: 178px * Theme.ui-scale;
+            y: 18px * Theme.ui-scale;
+            width: 28px * Theme.ui-scale;
+            height: 28px * Theme.ui-scale;
+            border-radius: 14px * Theme.ui-scale;
+            background: accent-color-3;
+            opacity: panel-style == 2 ? (active ? 0.22 : 0.0) : 0.0;
+        }
+        Rectangle {
+            x: 178px * Theme.ui-scale;
+            y: 46px * Theme.ui-scale;
+            width: 28px * Theme.ui-scale;
+            height: 28px * Theme.ui-scale;
+            border-radius: 14px * Theme.ui-scale;
+            background: accent-color-3;
+            opacity: panel-style == 2 ? (active ? 0.22 : 0.0) : 0.0;
+        }
+        Rectangle {
+            x: 147px * Theme.ui-scale;
+            y: 32px * Theme.ui-scale;
+            width: 24px * Theme.ui-scale;
+            height: 24px * Theme.ui-scale;
+            border-radius: 12px * Theme.ui-scale;
+            background: #10170a;
+            opacity: panel-style == 2 ? (active ? 0.56 : 0.0) : 0.0;
+        }
+
+        // Floating bubbles
+        Rectangle {
+            x: 36px * Theme.ui-scale;
+            y: (60px - 40px * drift-a) * Theme.ui-scale;
+            width: 18px * Theme.ui-scale;
+            height: 18px * Theme.ui-scale;
+            border-radius: 9px * Theme.ui-scale;
+            background: accent-color;
+            opacity: panel-style == 3 ? (active ? 0.18 : 0.0) : 0.0;
+        }
+        Rectangle {
+            x: 72px * Theme.ui-scale;
+            y: (74px - 56px * drift-b) * Theme.ui-scale;
+            width: 12px * Theme.ui-scale;
+            height: 12px * Theme.ui-scale;
+            border-radius: 6px * Theme.ui-scale;
+            background: accent-color-2;
+            opacity: panel-style == 3 ? (active ? 0.16 : 0.0) : 0.0;
+        }
+        Rectangle {
+            x: 112px * Theme.ui-scale;
+            y: (70px - 52px * drift-c) * Theme.ui-scale;
+            width: 22px * Theme.ui-scale;
+            height: 22px * Theme.ui-scale;
+            border-radius: 11px * Theme.ui-scale;
+            background: accent-color;
+            opacity: panel-style == 3 ? (active ? 0.14 : 0.0) : 0.0;
+        }
+        Rectangle {
+            x: 152px * Theme.ui-scale;
+            y: (78px - 60px * drift-d) * Theme.ui-scale;
+            width: 16px * Theme.ui-scale;
+            height: 16px * Theme.ui-scale;
+            border-radius: 8px * Theme.ui-scale;
+            background: accent-color-2;
+            opacity: panel-style == 3 ? (active ? 0.16 : 0.0) : 0.0;
+        }
+        Rectangle {
+            x: 194px * Theme.ui-scale;
+            y: (72px - 48px * drift-e) * Theme.ui-scale;
+            width: 26px * Theme.ui-scale;
+            height: 26px * Theme.ui-scale;
+            border-radius: 13px * Theme.ui-scale;
+            background: accent-color-3;
+            opacity: panel-style == 3 ? (active ? 0.12 : 0.0) : 0.0;
+        }
+        Rectangle {
+            x: 238px * Theme.ui-scale;
+            y: (76px - 54px * drift-b) * Theme.ui-scale;
+            width: 14px * Theme.ui-scale;
+            height: 14px * Theme.ui-scale;
+            border-radius: 7px * Theme.ui-scale;
+            background: accent-color;
+            opacity: panel-style == 3 ? (active ? 0.15 : 0.0) : 0.0;
+        }
+        Rectangle {
+            x: 266px * Theme.ui-scale;
+            y: (62px - 38px * drift-c) * Theme.ui-scale;
+            width: 10px * Theme.ui-scale;
+            height: 10px * Theme.ui-scale;
+            border-radius: 5px * Theme.ui-scale;
+            background: accent-color-2;
+            opacity: panel-style == 3 ? (active ? 0.15 : 0.0) : 0.0;
+        }
+
+        // Kaleidoscope
+        Rectangle {
+            x: (128px - 20px * drift-a) * Theme.ui-scale;
+            y: 8px * Theme.ui-scale;
+            width: 22px * Theme.ui-scale;
+            height: 74px * Theme.ui-scale;
+            border-radius: 11px * Theme.ui-scale;
+            background: accent-color;
+            opacity: panel-style == 4 ? (active ? 0.16 : 0.0) : 0.0;
+        }
+        Rectangle {
+            x: (176px + 20px * drift-a) * Theme.ui-scale;
+            y: 8px * Theme.ui-scale;
+            width: 22px * Theme.ui-scale;
+            height: 74px * Theme.ui-scale;
+            border-radius: 11px * Theme.ui-scale;
+            background: accent-color;
+            opacity: panel-style == 4 ? (active ? 0.16 : 0.0) : 0.0;
+        }
+        Rectangle {
+            x: 74px * Theme.ui-scale;
+            y: (24px + 8px * drift-b) * Theme.ui-scale;
+            width: 56px * Theme.ui-scale;
+            height: 20px * Theme.ui-scale;
+            border-radius: 10px * Theme.ui-scale;
+            background: accent-color-2;
+            opacity: panel-style == 4 ? (active ? 0.18 : 0.0) : 0.0;
+        }
+        Rectangle {
+            x: 196px * Theme.ui-scale;
+            y: (24px + 8px * drift-b) * Theme.ui-scale;
+            width: 56px * Theme.ui-scale;
+            height: 20px * Theme.ui-scale;
+            border-radius: 10px * Theme.ui-scale;
+            background: accent-color-2;
+            opacity: panel-style == 4 ? (active ? 0.18 : 0.0) : 0.0;
+        }
+        Rectangle {
+            x: 96px * Theme.ui-scale;
+            y: (44px - 10px * drift-c) * Theme.ui-scale;
+            width: 44px * Theme.ui-scale;
+            height: 18px * Theme.ui-scale;
+            border-radius: 9px * Theme.ui-scale;
+            background: accent-color-3;
+            opacity: panel-style == 4 ? (active ? 0.20 : 0.0) : 0.0;
+        }
+        Rectangle {
+            x: 186px * Theme.ui-scale;
+            y: (44px - 10px * drift-c) * Theme.ui-scale;
+            width: 44px * Theme.ui-scale;
+            height: 18px * Theme.ui-scale;
+            border-radius: 9px * Theme.ui-scale;
+            background: accent-color-3;
+            opacity: panel-style == 4 ? (active ? 0.20 : 0.0) : 0.0;
+        }
+        Rectangle {
+            x: 146px * Theme.ui-scale;
+            y: 24px * Theme.ui-scale;
+            width: 34px * Theme.ui-scale;
+            height: 34px * Theme.ui-scale;
+            border-radius: 17px * Theme.ui-scale;
+            background: accent-color-2;
+            opacity: panel-style == 4 ? (active ? 0.24 : 0.0) : 0.0;
+        }
+
+        // Hero multicolor field
+        Rectangle {
+            x: (-12px + 20px * drift-a) * Theme.ui-scale;
+            y: 10px * Theme.ui-scale;
+            width: 144px * Theme.ui-scale;
+            height: 82px * Theme.ui-scale;
+            border-radius: 26px * Theme.ui-scale;
+            background: accent-color;
+            opacity: panel-style == 5 ? (active ? 0.12 : 0.0) : 0.0;
+        }
+        Rectangle {
+            x: (86px + 12px * drift-b) * Theme.ui-scale;
+            y: 4px * Theme.ui-scale;
+            width: 156px * Theme.ui-scale;
+            height: 88px * Theme.ui-scale;
+            border-radius: 28px * Theme.ui-scale;
+            background: accent-color-2;
+            opacity: panel-style == 5 ? (active ? 0.12 : 0.0) : 0.0;
+        }
+        Rectangle {
+            x: (188px - 18px * drift-c) * Theme.ui-scale;
+            y: 14px * Theme.ui-scale;
+            width: 120px * Theme.ui-scale;
+            height: 70px * Theme.ui-scale;
+            border-radius: 24px * Theme.ui-scale;
+            background: accent-color-3;
+            opacity: panel-style == 5 ? (active ? 0.11 : 0.0) : 0.0;
+        }
+        Rectangle {
+            x: -70px * Theme.ui-scale + (parent.width + 60px * Theme.ui-scale) * drift-d;
+            y: 0px;
+            width: 74px * Theme.ui-scale;
+            height: parent.height;
+            background: #76ffffff;
+            opacity: panel-style == 5 ? (active ? 0.16 : 0.0) : 0.0;
+            animate opacity { duration: Theme.dur-normal; }
+        }
+    }
+
+    // Soft center glow that increases on hover.
+        Rectangle {
+        x: 14px * Theme.ui-scale;
+        y: 14px * Theme.ui-scale;
+        width: parent.width - 28px * Theme.ui-scale;
+        height: parent.height - 28px * Theme.ui-scale;
+        border-radius: Theme.radius-sm;
+            background:
+            panel-style == 1 ? (active ? #12070618 : #08000000) :
+            panel-style == 2 ? (active ? #17311412 : #08000000) :
+            panel-style == 3 ? (active ? #16324010 : #08000000) :
+            panel-style == 4 ? (active ? #2a1c3f14 : #08000000) :
+            (active ? #1c2f3a10 : #08000000);
+        animate background { duration: Theme.dur-normal; }
+    }
+
+    // Thin accent strip echoes modern panel styling patterns.
+    Rectangle {
+        x: 0px;
+        y: 0px;
+        width: parent.width;
+        height: 3px * Theme.ui-scale;
+        background: active ? accent-color : Theme.border;
+        animate background { duration: Theme.dur-normal; }
+    }
+
+    // Hero scan line: a tasteful animated highlight sweep.
+    Rectangle {
+        x: hero ? (active ? parent.width : -70px * Theme.ui-scale) : -70px * Theme.ui-scale;
+        y: 0px;
+        width: 54px * Theme.ui-scale;
+        height: parent.height;
+        background: accent-color-3;
+        opacity: hero ? (active ? 1 : 0) : 0;
+        animate x { duration: Theme.dur-hero; }
+        animate opacity { duration: Theme.dur-normal; }
+    }
+
+    VerticalLayout {
+        spacing: Theme.space-xs;
+        padding: Theme.space-md;
+
+        Text {
+            text: root.title;
+            color: Theme.text-main;
+            font-size: 15px * Theme.ui-scale;
+            font-weight: 650;
+            horizontal-alignment: left;
+            vertical-alignment: center;
+        }
+
+        Text {
+            text: root.subtitle;
+            color: Theme.text-muted;
+            wrap: word-wrap;
+            font-size: 13px * Theme.ui-scale;
+            horizontal-alignment: left;
+            vertical-alignment: top;
+        }
+
+        Rectangle {
+            background: #00000000;
+            min-height: 32px * Theme.ui-scale;
+            @children
+        }
+    }
+
+    pad := TouchArea {
+        mouse-cursor: pointer;
+        scroll-event(event) => {
+            if (event.modifiers.control && event.delta_y != 0px) {
+                Theme.user-zoom = max(0.7, min(2.2, Theme.user-zoom + (event.delta_y > 0px ? 0.08 : -0.08)));
+                return accept;
+            }
+            reject
+        }
+        clicked => {
+            root.activated = !root.activated;
+        }
+    }
+}

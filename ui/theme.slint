@@ -1,0 +1,48 @@
+// ui/theme.slint
+// Pass 2 expands shared design tokens so motion and polish stay centralized.
+
+export global Theme {
+    // Effective UI scale combines live window-resize scaling and user zoom.
+    in-out property <float> window-scale: 1.0;
+    in-out property <float> user-zoom: 1.0;
+    in property <float> ui-scale: max(0.55, min(3.2, window-scale * user-zoom));
+    in property <int> zoom-percent: Math.round(ui-scale * 100);
+
+    // Base colors
+    in property <color> app-bg: #18212d;
+    in property <color> app-bg-deep: #121a24;
+    in property <color> panel-bg: #223044;
+    in property <color> panel-bg-soft: #27364b;
+    in property <color> panel-bg-hero: #2a3d57;
+    in property <color> border: #405673;
+    in property <color> border-strong: #6386b3;
+
+    // Text colors
+    in property <color> text-main: #f1f6fd;
+    in property <color> text-muted: #c2d1e5;
+    in property <color> text-strong: #ffffff;
+
+    // Accent colors
+    in property <color> accent: #5fc0ff;
+    in property <color> accent-soft: #3b80ac;
+    in property <color> accent-deep: #1f5478;
+    in property <color> success: #4ac08f;
+    in property <color> warning: #f2ae52;
+    in property <color> danger: #f36a72;
+
+    // Spacing + shape
+    in property <length> space-xs: 6px * ui-scale;
+    in property <length> space-sm: 10px * ui-scale;
+    in property <length> space-md: 14px * ui-scale;
+    in property <length> space-lg: 20px * ui-scale;
+    in property <length> space-xl: 28px * ui-scale;
+    in property <length> radius-sm: 8px * ui-scale;
+    in property <length> radius-md: 12px * ui-scale;
+    in property <length> radius-lg: 16px * ui-scale;
+
+    // Timing tokens reused by every hero demo to keep motion language consistent.
+    in property <duration> dur-fast: 110ms;
+    in property <duration> dur-normal: 220ms;
+    in property <duration> dur-slow: 420ms;
+    in property <duration> dur-hero: 760ms;
+}

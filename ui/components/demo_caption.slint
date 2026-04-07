@@ -1,0 +1,13 @@
+import { Theme } from "../theme.slint";
+
+// Small reusable caption text used under every demo item.
+export component DemoCaption inherits Text {
+    in property <string> caption;
+
+    text: caption;
+    color: Theme.text-muted;
+    wrap: word-wrap;
+    font-size: 13px * Theme.ui-scale;
+    horizontal-alignment: left;
+    vertical-alignment: top;
+}

@@ -1,0 +1,10 @@
+<svg width="152" height="44" viewBox="0 0 152 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="1" y="1" width="150" height="42" rx="10" fill="#2D3146" stroke="#8E9FE3" stroke-width="2"/>
+  <circle cx="21" cy="22" r="7" stroke="#AAB8FF" stroke-width="2"/>
+  <path d="M23.5 16.5L27 19.5L23.5 22.5" stroke="#AAB8FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M27 19.5C27 24.1944 23.1944 28 18.5 28" stroke="#AAB8FF" stroke-width="2" stroke-linecap="round"/>
+  <rect x="122" y="16" width="3" height="12" rx="1.5" fill="#6F7DBD"/>
+  <rect x="128" y="13" width="3" height="18" rx="1.5" fill="#8E9FE3"/>
+  <rect x="134" y="17" width="3" height="10" rx="1.5" fill="#6F7DBD"/>
+  <text x="76" y="28" text-anchor="middle" fill="#F7F9FF" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="700">Spin Hover</text>
+</svg>

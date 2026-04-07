@@ -1,0 +1,133 @@
+import { Theme } from "../theme.slint";
+import { DemoSection } from "../components/demo_section.slint";
+import { StylePreviewRow } from "../components/style_preview_row.slint";
+import { StyledButton } from "../components/styled_button.slint";
+
+// Pass 2 motion section: explicit timing comparisons and a hero sliding indicator demo.
+export component MotionDemo inherits DemoSection {
+    title: "5. Motion and Transition";
+    subtitle: "Compares fast/medium/slow timing and includes a hero indicator slide for multi-step motion.";
+
+    // Shared state for hero selection indicator.
+    in-out property <int> active-index: 0;
+
+    StylePreviewRow {
+        title: "Fast Transition";
+        caption: "Fast timing feels responsive for frequent actions and dense workflows.";
+        StyledButton {
+            text: "Fast";
+            anim-duration: Theme.dur-fast;
+            base-color: #244967;
+            hover-color: #30628b;
+            pressed-color: #1d3b54;
+            outline-color: Theme.accent;
+            width: 124px * Theme.ui-scale;
+            height: 40px * Theme.ui-scale;
+        }
+    }
+
+    StylePreviewRow {
+        title: "Medium Transition";
+        caption: "Medium timing balances readability and speed for most UI controls.";
+        StyledButton {
+            text: "Medium";
+            anim-duration: Theme.dur-normal;
+            base-color: #2b3648;
+            hover-color: #3d4e68;
+            pressed-color: #222b3a;
+            outline-color: #6d88ab;
+            width: 124px * Theme.ui-scale;
+            height: 40px * Theme.ui-scale;
+        }
+    }
+
+    StylePreviewRow {
+        title: "Slow Polished";
+        caption: "Slower transitions are useful when you want users to notice state changes.";
+        StyledButton {
+            text: "Slow";
+            anim-duration: Theme.dur-slow;
+            base-color: #32412f;
+            hover-color: #455a42;
+            pressed-color: #273223;
+            outline-color: #88b27f;
+            width: 124px * Theme.ui-scale;
+            height: 40px * Theme.ui-scale;
+        }
+    }
+
+    // Hero motion demo: indicator slides between three presets on click.
+    StylePreviewRow {
+        hero: true;
+        title: "Hero Motion";
+        caption: "Hero effect: click a mode and watch the active indicator slide smoothly between segments.";
+
+        Rectangle {
+            width: 360px * Theme.ui-scale;
+            height: 92px * Theme.ui-scale;
+            border-radius: Theme.radius-sm;
+            border-width: 1px * Theme.ui-scale;
+            border-color: Theme.accent;
+            background: #22334a;
+            clip: true;
+
+            // Sliding highlight that tracks selection state.
+            Rectangle {
+                y: 10px * Theme.ui-scale;
+                width: 112px * Theme.ui-scale;
+                height: 34px * Theme.ui-scale;
+                x: root.active-index == 0 ? 10px * Theme.ui-scale : (root.active-index == 1 ? 124px * Theme.ui-scale : 238px * Theme.ui-scale);
+                border-radius: 8px * Theme.ui-scale;
+                background: #2f6e9f;
+                animate x { duration: Theme.dur-hero; }
+            }
+
+            HorizontalLayout {
+                spacing: Theme.space-xs;
+                padding: 10px * Theme.ui-scale;
+
+                StyledButton {
+                    text: "Fast";
+                    width: 112px * Theme.ui-scale;
+                    height: 34px * Theme.ui-scale;
+                    base-color: #00000000;
+                    hover-color: #2a415c;
+                    pressed-color: #1c2f45;
+                    outline-color: #00000000;
+                    clicked => { root.active-index = 0; }
+                }
+
+                StyledButton {
+                    text: "Medium";
+                    width: 112px * Theme.ui-scale;
+                    height: 34px * Theme.ui-scale;
+                    base-color: #00000000;
+                    hover-color: #2a415c;
+                    pressed-color: #1c2f45;
+                    outline-color: #00000000;
+                    clicked => { root.active-index = 1; }
+                }
+
+                StyledButton {
+                    text: "Slow";
+                    width: 112px * Theme.ui-scale;
+                    height: 34px * Theme.ui-scale;
+                    base-color: #00000000;
+                    hover-color: #2a415c;
+                    pressed-color: #1c2f45;
+                    outline-color: #00000000;
+                    clicked => { root.active-index = 2; }
+                }
+            }
+
+            Text {
+                y: 56px * Theme.ui-scale;
+                x: 12px * Theme.ui-scale;
+                width: parent.width - 24px * Theme.ui-scale;
+                text: root.active-index == 0 ? "Fast mode: crisp and immediate" : (root.active-index == 1 ? "Medium mode: balanced interaction rhythm" : "Slow mode: deliberate and presentational");
+                color: Theme.text-muted;
+                font-size: 12px * Theme.ui-scale;
+            }
+        }
+    }
+}
