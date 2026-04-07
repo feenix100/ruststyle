@@ -58,7 +58,7 @@ cargo run
 
 ## 📸 Screenshot
 
-<!-- Add screenshot here -->
+![Screenshot](./screenshot.png)
 
 ## 📦 Tech Stack
 
